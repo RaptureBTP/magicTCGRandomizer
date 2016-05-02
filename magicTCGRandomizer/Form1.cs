@@ -16,5 +16,7 @@ namespace magicTCGRandomizer
         {
             InitializeComponent();
         }
+
+
     }
 }

@@ -1,1 +1,9 @@
 c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\magicTCGRandomizer.exe.config
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\magicTCGRandomizer.exe
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\magicTCGRandomizer.pdb
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.csprojResolveAssemblyReference.cache
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.Form1.resources
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.Properties.Resources.resources
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.csproj.GenerateResource.Cache
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.exe
+c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.pdb
