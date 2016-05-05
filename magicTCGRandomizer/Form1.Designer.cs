@@ -43,6 +43,9 @@
             this.LblSet = new System.Windows.Forms.Label();
             this.comboBoxSet = new System.Windows.Forms.ComboBox();
             this.LblFormat = new System.Windows.Forms.Label();
+            this.comboBoxFormat = new System.Windows.Forms.ComboBox();
+            this.buttonSearch = new System.Windows.Forms.Button();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             this.SuspendLayout();
             // 
@@ -262,11 +265,47 @@
             this.LblFormat.TabIndex = 14;
             this.LblFormat.Text = "Format:";
             // 
+            // comboBoxFormat
+            // 
+            this.comboBoxFormat.FormattingEnabled = true;
+            this.comboBoxFormat.Items.AddRange(new object[] {
+            "Random",
+            "Standard",
+            "Modern",
+            "Commander",
+            "Legacy",
+            "Vintage"});
+            this.comboBoxFormat.Location = new System.Drawing.Point(290, 126);
+            this.comboBoxFormat.Name = "comboBoxFormat";
+            this.comboBoxFormat.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxFormat.TabIndex = 15;
+            // 
+            // buttonSearch
+            // 
+            this.buttonSearch.Location = new System.Drawing.Point(16, 265);
+            this.buttonSearch.Name = "buttonSearch";
+            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
+            this.buttonSearch.TabIndex = 16;
+            this.buttonSearch.Text = "Search";
+            this.buttonSearch.UseVisualStyleBackColor = true;
+            this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(465, 12);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(250, 250);
+            this.webBrowser1.TabIndex = 17;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(746, 624);
+            this.Controls.Add(this.webBrowser1);
+            this.Controls.Add(this.buttonSearch);
+            this.Controls.Add(this.comboBoxFormat);
             this.Controls.Add(this.LblFormat);
             this.Controls.Add(this.comboBoxSet);
             this.Controls.Add(this.LblSet);
@@ -307,6 +346,9 @@
         private System.Windows.Forms.Label LblSet;
         private System.Windows.Forms.ComboBox comboBoxSet;
         private System.Windows.Forms.Label LblFormat;
+        private System.Windows.Forms.ComboBox comboBoxFormat;
+        private System.Windows.Forms.Button buttonSearch;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
 

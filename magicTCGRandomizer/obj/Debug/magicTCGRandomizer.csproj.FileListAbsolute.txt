@@ -7,3 +7,10 @@ c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCG
 c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.csproj.GenerateResource.Cache
 c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.exe
 c:\users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Debug\magicTCGRandomizer.pdb
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\FSharp.Core.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\HtmlAgilityPack.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\ScrapySharp.Core.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\ScrapySharpAsync.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\FSharp.Core.xml
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Debug\HtmlAgilityPack.xml
