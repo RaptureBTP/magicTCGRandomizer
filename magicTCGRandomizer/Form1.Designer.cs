@@ -46,6 +46,7 @@
             this.comboBoxFormat = new System.Windows.Forms.ComboBox();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.checkBoxColorRandom = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +76,6 @@
             this.ColorListCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ColorListCheckBox.FormattingEnabled = true;
             this.ColorListCheckBox.Items.AddRange(new object[] {
-            "Random",
             "Blue",
             "Red",
             "Green",
@@ -84,7 +84,7 @@
             "Colorless"});
             this.ColorListCheckBox.Location = new System.Drawing.Point(16, 79);
             this.ColorListCheckBox.Name = "ColorListCheckBox";
-            this.ColorListCheckBox.Size = new System.Drawing.Size(133, 140);
+            this.ColorListCheckBox.Size = new System.Drawing.Size(133, 123);
             this.ColorListCheckBox.TabIndex = 2;
             // 
             // LblColor
@@ -298,11 +298,23 @@
             this.webBrowser1.Size = new System.Drawing.Size(250, 250);
             this.webBrowser1.TabIndex = 17;
             // 
+            // checkBoxColorRandom
+            // 
+            this.checkBoxColorRandom.AutoSize = true;
+            this.checkBoxColorRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxColorRandom.Location = new System.Drawing.Point(70, 58);
+            this.checkBoxColorRandom.Name = "checkBoxColorRandom";
+            this.checkBoxColorRandom.Size = new System.Drawing.Size(77, 19);
+            this.checkBoxColorRandom.TabIndex = 18;
+            this.checkBoxColorRandom.Text = "Random";
+            this.checkBoxColorRandom.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(746, 624);
+            this.Controls.Add(this.checkBoxColorRandom);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.comboBoxFormat);
@@ -349,6 +361,7 @@
         private System.Windows.Forms.ComboBox comboBoxFormat;
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.CheckBox checkBoxColorRandom;
     }
 }
 

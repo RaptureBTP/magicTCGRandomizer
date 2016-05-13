@@ -39,17 +39,34 @@ namespace magicTCGRandomizer
                 //HtmlNode TitleNode = PageResult.Html.CssSelect("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage").First();
 
                 bool cardFound = false;
+                bool colorMismatch = false;
 
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
                     var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
                         if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
                         {
                             continue; //CMC didn't match, keep looping
                         }
+                    }
+                    if (checkBoxColorRandom.Checked != true) //if RandomColor box is not checked
+                    {
+                        var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                        for(int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
+                        {
+                            if(checkMana(document, checkedColors[i].ToString()) == false) //TODO: need to include 'Exclusive Colors' logic
+                            {
+                                colorMismatch = true; //at least one of the colors didnt match
+                                break;
+                            }
+                        }
+                        if (colorMismatch == true)
+                            continue; //loop to a new random card
                     }
                 }
 
@@ -84,11 +101,26 @@ namespace magicTCGRandomizer
                 return false;
             }
             if(result.Equals(cmc))
-            {
                 return true;
+            else
+                return false;
+        }
+        
+        public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
+        {
+            var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
+            if (manaRow != null)
+            {
+                var colorChildren = manaRow.ChildNodes;
+                var colorList = colorChildren[3].InnerHtml.ToString();
+                if(colorList.Contains(color))
+                    return true;
+                else
+                    return false;
             }
             else
             {
+                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return false;
             }
         } 
