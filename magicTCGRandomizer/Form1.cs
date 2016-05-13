@@ -40,11 +40,14 @@ namespace magicTCGRandomizer
 
                 bool cardFound = false;
                 bool colorMismatch = false;
+                bool colorMatch = false;
+                bool tooManyColors = false;
+                int colorCount = 0;
 
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
@@ -57,16 +60,70 @@ namespace magicTCGRandomizer
                     if (checkBoxColorRandom.Checked != true) //if RandomColor box is not checked
                     {
                         var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
-                        for(int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
+
+                        if(radioButtonAND.Checked == true) //check for AND stipulation
                         {
-                            if(checkMana(document, checkedColors[i].ToString()) == false) //TODO: need to include 'Exclusive Colors' logic
+                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
                             {
-                                colorMismatch = true; //at least one of the colors didnt match
-                                break;
+                                if (checkMana(document, checkedColors[i].ToString()) == false)
+                                {
+                                    colorMismatch = true; //at least one of the colors didnt match
+                                    break;
+                                }
+                                else
+                                    colorCount++;
+                            }
+                            if (colorMismatch == true || countCMCColors(document) != colorCount) 
+                            { 
+                                colorMismatch = false;
+                                colorCount = 0;
+                                continue; //loop to a new random card
+                            }
+                            colorCount = 0;
+                        }
+                        else if(radioButtonOR.Checked == true) 
+                        {
+                            if (countCMCColors(document) > 1) //if card is not mono-colored, skip it
+                                continue;
+
+                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
+                            {
+                                if (checkMana(document, checkedColors[i].ToString()) == true)
+                                {
+                                    if(colorMatch == false)
+                                    {
+                                        colorMatch = true;
+                                    }
+                                    else
+                                    {
+                                        colorMatch = false;
+                                        tooManyColors = true;
+                                    }
+                                }
+                            }
+                            if (tooManyColors == true || colorMatch == false)
+                            {
+                                tooManyColors = false;
+                                continue;
                             }
                         }
-                        if (colorMismatch == true)
-                            continue; //loop to a new random card
+                        else if(radioButtonANY.Checked == true) //TODO: Might need to change this - Has to be in some combination of ALL the colors, or can CONTAIN any one of the colors?
+                        {
+                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
+                            {
+                                if (checkMana(document, checkedColors[i].ToString()) == true)
+                                {
+                                    colorMatch = true; //at least one of the colors matched 
+                                    break;
+                                }
+                            }
+                            
+                            if (colorMatch == false)
+                            {
+                                colorMatch = false; //?
+                                continue;
+                            }
+                        }
                     }
                 }
 
@@ -123,6 +180,32 @@ namespace magicTCGRandomizer
                 Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return false;
             }
-        } 
+        }
+        
+        public int countCMCColors(HtmlAgilityPack.HtmlDocument document)
+        {
+            var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
+            if (manaRow != null)
+            {
+                var colorChildren = manaRow.ChildNodes;
+                var colorList = colorChildren[3].InnerHtml.ToString();
+                int webColorCount = Regex.Matches(colorList, "src=").Count; //use regex to count number of mana symbol images
+                for(int j = 0; j <= 15; j++)//check for generic mana symbol
+                {
+                    string altWithDigit = "alt=\"" + j + "\"";
+                    if (colorList.Contains(altWithDigit))
+                    {
+                        webColorCount -= 1;
+                        break;
+                    }
+                }
+                return webColorCount;
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+                return 0;
+            }
+        }
     }
 }

@@ -45,16 +45,22 @@
             this.LblFormat = new System.Windows.Forms.Label();
             this.comboBoxFormat = new System.Windows.Forms.ComboBox();
             this.buttonSearch = new System.Windows.Forms.Button();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.checkBoxColorRandom = new System.Windows.Forms.CheckBox();
+            this.radioButtonAND = new System.Windows.Forms.RadioButton();
+            this.radioButtonOR = new System.Windows.Forms.RadioButton();
+            this.radioButtonANY = new System.Windows.Forms.RadioButton();
+            this.pictureBoxCard = new System.Windows.Forms.PictureBox();
+            this.textBoxOutput = new System.Windows.Forms.TextBox();
+            this.LblOutput = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
             // 
             // LblRIG
             // 
             this.LblRIG.AutoSize = true;
             this.LblRIG.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblRIG.Location = new System.Drawing.Point(12, 336);
+            this.LblRIG.Location = new System.Drawing.Point(12, 362);
             this.LblRIG.Name = "LblRIG";
             this.LblRIG.Size = new System.Drawing.Size(208, 20);
             this.LblRIG.TabIndex = 0;
@@ -143,7 +149,7 @@
             // checkBoxExclusiveColors
             // 
             this.checkBoxExclusiveColors.AutoSize = true;
-            this.checkBoxExclusiveColors.Location = new System.Drawing.Point(16, 217);
+            this.checkBoxExclusiveColors.Location = new System.Drawing.Point(97, 312);
             this.checkBoxExclusiveColors.Name = "checkBoxExclusiveColors";
             this.checkBoxExclusiveColors.Size = new System.Drawing.Size(132, 21);
             this.checkBoxExclusiveColors.TabIndex = 8;
@@ -259,7 +265,7 @@
             // 
             this.LblFormat.AutoSize = true;
             this.LblFormat.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblFormat.Location = new System.Drawing.Point(287, 108);
+            this.LblFormat.Location = new System.Drawing.Point(430, 57);
             this.LblFormat.Name = "LblFormat";
             this.LblFormat.Size = new System.Drawing.Size(63, 17);
             this.LblFormat.TabIndex = 14;
@@ -275,28 +281,20 @@
             "Commander",
             "Legacy",
             "Vintage"});
-            this.comboBoxFormat.Location = new System.Drawing.Point(290, 126);
+            this.comboBoxFormat.Location = new System.Drawing.Point(433, 75);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(121, 24);
             this.comboBoxFormat.TabIndex = 15;
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(16, 265);
+            this.buttonSearch.Location = new System.Drawing.Point(12, 310);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
             this.buttonSearch.TabIndex = 16;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Location = new System.Drawing.Point(465, 12);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(250, 250);
-            this.webBrowser1.TabIndex = 17;
             // 
             // checkBoxColorRandom
             // 
@@ -309,13 +307,79 @@
             this.checkBoxColorRandom.Text = "Random";
             this.checkBoxColorRandom.UseVisualStyleBackColor = true;
             // 
+            // radioButtonAND
+            // 
+            this.radioButtonAND.AutoSize = true;
+            this.radioButtonAND.Location = new System.Drawing.Point(16, 218);
+            this.radioButtonAND.Name = "radioButtonAND";
+            this.radioButtonAND.Size = new System.Drawing.Size(239, 21);
+            this.radioButtonAND.TabIndex = 19;
+            this.radioButtonAND.TabStop = true;
+            this.radioButtonAND.Text = "AND (must be all checked colors)";
+            this.radioButtonAND.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonOR
+            // 
+            this.radioButtonOR.AutoSize = true;
+            this.radioButtonOR.Location = new System.Drawing.Point(16, 246);
+            this.radioButtonOR.Name = "radioButtonOR";
+            this.radioButtonOR.Size = new System.Drawing.Size(322, 21);
+            this.radioButtonOR.TabIndex = 20;
+            this.radioButtonOR.TabStop = true;
+            this.radioButtonOR.Text = "OR (can be any one color of the above colors)";
+            this.radioButtonOR.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonANY
+            // 
+            this.radioButtonANY.AutoSize = true;
+            this.radioButtonANY.Location = new System.Drawing.Point(16, 274);
+            this.radioButtonANY.Name = "radioButtonANY";
+            this.radioButtonANY.Size = new System.Drawing.Size(336, 21);
+            this.radioButtonANY.TabIndex = 21;
+            this.radioButtonANY.TabStop = true;
+            this.radioButtonANY.Text = "ANY (can be any combination of selected colors)";
+            this.radioButtonANY.UseVisualStyleBackColor = true;
+            // 
+            // pictureBoxCard
+            // 
+            this.pictureBoxCard.Location = new System.Drawing.Point(616, 23);
+            this.pictureBoxCard.MaximumSize = new System.Drawing.Size(223, 310);
+            this.pictureBoxCard.MinimumSize = new System.Drawing.Size(223, 310);
+            this.pictureBoxCard.Name = "pictureBoxCard";
+            this.pictureBoxCard.Size = new System.Drawing.Size(223, 310);
+            this.pictureBoxCard.TabIndex = 22;
+            this.pictureBoxCard.TabStop = false;
+            // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.Location = new System.Drawing.Point(358, 156);
+            this.textBoxOutput.Multiline = true;
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.Size = new System.Drawing.Size(232, 130);
+            this.textBoxOutput.TabIndex = 23;
+            // 
+            // LblOutput
+            // 
+            this.LblOutput.AutoSize = true;
+            this.LblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblOutput.Location = new System.Drawing.Point(355, 136);
+            this.LblOutput.Name = "LblOutput";
+            this.LblOutput.Size = new System.Drawing.Size(67, 17);
+            this.LblOutput.TabIndex = 24;
+            this.LblOutput.Text = "Results:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(746, 624);
+            this.ClientSize = new System.Drawing.Size(851, 681);
+            this.Controls.Add(this.LblOutput);
+            this.Controls.Add(this.textBoxOutput);
+            this.Controls.Add(this.pictureBoxCard);
+            this.Controls.Add(this.radioButtonANY);
+            this.Controls.Add(this.radioButtonOR);
+            this.Controls.Add(this.radioButtonAND);
             this.Controls.Add(this.checkBoxColorRandom);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.comboBoxFormat);
             this.Controls.Add(this.LblFormat);
@@ -336,6 +400,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -360,8 +425,13 @@
         private System.Windows.Forms.Label LblFormat;
         private System.Windows.Forms.ComboBox comboBoxFormat;
         private System.Windows.Forms.Button buttonSearch;
-        private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.CheckBox checkBoxColorRandom;
+        private System.Windows.Forms.RadioButton radioButtonAND;
+        private System.Windows.Forms.RadioButton radioButtonOR;
+        private System.Windows.Forms.RadioButton radioButtonANY;
+        private System.Windows.Forms.PictureBox pictureBoxCard;
+        private System.Windows.Forms.TextBox textBoxOutput;
+        private System.Windows.Forms.Label LblOutput;
     }
 }
 
