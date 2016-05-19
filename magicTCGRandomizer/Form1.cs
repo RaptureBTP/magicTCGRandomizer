@@ -136,6 +136,11 @@ namespace magicTCGRandomizer
                         if (checkType(document, comboBoxCardType.Text) == false)
                             continue;
                     }
+                    if(comboBoxRarity.Text != "Random")
+                    {if (checkRarity(document, comboBoxRarity.Text) == false)
+                            continue;
+
+                    }
                 }
 
 
@@ -242,6 +247,22 @@ namespace magicTCGRandomizer
             else
             {
                 Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
+                return false;
+            }
+        }
+        public bool checkRarity(HtmlAgilityPack.HtmlDocument document, string rarity)
+        {
+            var rarityRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rarityRow");
+            if(rarityRow != null)
+            {
+                if (Regex.IsMatch(rarityRow.InnerText.ToString(), rarity))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
                 return false;
             }
         }

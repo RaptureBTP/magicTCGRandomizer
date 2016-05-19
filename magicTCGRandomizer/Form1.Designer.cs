@@ -189,11 +189,12 @@
             "Common",
             "Uncommon",
             "Rare",
-            "Mythic"});
+            "Mythic Rare"});
             this.comboBoxRarity.Location = new System.Drawing.Point(152, 176);
             this.comboBoxRarity.Name = "comboBoxRarity";
             this.comboBoxRarity.Size = new System.Drawing.Size(121, 24);
             this.comboBoxRarity.TabIndex = 11;
+            this.comboBoxRarity.Text = "Random";
             // 
             // LblSet
             // 
@@ -254,6 +255,7 @@
             this.comboBoxSet.Name = "comboBoxSet";
             this.comboBoxSet.Size = new System.Drawing.Size(132, 24);
             this.comboBoxSet.TabIndex = 13;
+            this.comboBoxSet.Text = "Random";
             // 
             // LblFormat
             // 
@@ -279,6 +281,7 @@
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(121, 24);
             this.comboBoxFormat.TabIndex = 15;
+            this.comboBoxFormat.Text = "Random";
             // 
             // buttonSearch
             // 
@@ -378,6 +381,7 @@
             this.textBoxSubtype.Name = "textBoxSubtype";
             this.textBoxSubtype.Size = new System.Drawing.Size(133, 22);
             this.textBoxSubtype.TabIndex = 26;
+            this.textBoxSubtype.Text = "Random";
             // 
             // LblKeyword
             // 
