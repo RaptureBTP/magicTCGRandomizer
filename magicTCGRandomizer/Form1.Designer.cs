@@ -51,6 +51,10 @@
             this.pictureBoxCard = new System.Windows.Forms.PictureBox();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.LblOutput = new System.Windows.Forms.Label();
+            this.LblSubtype = new System.Windows.Forms.Label();
+            this.textBoxSubtype = new System.Windows.Forms.TextBox();
+            this.LblKeyword = new System.Windows.Forms.Label();
+            this.textBoxKeyword = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
@@ -165,6 +169,7 @@
             this.comboBoxCardType.Name = "comboBoxCardType";
             this.comboBoxCardType.Size = new System.Drawing.Size(121, 24);
             this.comboBoxCardType.TabIndex = 9;
+            this.comboBoxCardType.Text = "Random";
             // 
             // LblRarity
             // 
@@ -341,7 +346,7 @@
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(358, 156);
+            this.textBoxOutput.Location = new System.Drawing.Point(373, 205);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.Size = new System.Drawing.Size(232, 130);
@@ -351,17 +356,55 @@
             // 
             this.LblOutput.AutoSize = true;
             this.LblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblOutput.Location = new System.Drawing.Point(355, 136);
+            this.LblOutput.Location = new System.Drawing.Point(370, 185);
             this.LblOutput.Name = "LblOutput";
             this.LblOutput.Size = new System.Drawing.Size(67, 17);
             this.LblOutput.TabIndex = 24;
             this.LblOutput.Text = "Results:";
+            // 
+            // LblSubtype
+            // 
+            this.LblSubtype.AutoSize = true;
+            this.LblSubtype.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblSubtype.Location = new System.Drawing.Point(289, 108);
+            this.LblSubtype.Name = "LblSubtype";
+            this.LblSubtype.Size = new System.Drawing.Size(67, 17);
+            this.LblSubtype.TabIndex = 25;
+            this.LblSubtype.Text = "Subtype";
+            // 
+            // textBoxSubtype
+            // 
+            this.textBoxSubtype.Location = new System.Drawing.Point(289, 128);
+            this.textBoxSubtype.Name = "textBoxSubtype";
+            this.textBoxSubtype.Size = new System.Drawing.Size(133, 22);
+            this.textBoxSubtype.TabIndex = 26;
+            // 
+            // LblKeyword
+            // 
+            this.LblKeyword.AutoSize = true;
+            this.LblKeyword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblKeyword.Location = new System.Drawing.Point(433, 106);
+            this.LblKeyword.Name = "LblKeyword";
+            this.LblKeyword.Size = new System.Drawing.Size(69, 17);
+            this.LblKeyword.TabIndex = 27;
+            this.LblKeyword.Text = "Keyword";
+            // 
+            // textBoxKeyword
+            // 
+            this.textBoxKeyword.Location = new System.Drawing.Point(433, 130);
+            this.textBoxKeyword.Name = "textBoxKeyword";
+            this.textBoxKeyword.Size = new System.Drawing.Size(121, 22);
+            this.textBoxKeyword.TabIndex = 28;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(851, 681);
+            this.Controls.Add(this.textBoxKeyword);
+            this.Controls.Add(this.LblKeyword);
+            this.Controls.Add(this.textBoxSubtype);
+            this.Controls.Add(this.LblSubtype);
             this.Controls.Add(this.LblOutput);
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.pictureBoxCard);
@@ -419,6 +462,10 @@
         private System.Windows.Forms.PictureBox pictureBoxCard;
         private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Label LblOutput;
+        private System.Windows.Forms.Label LblSubtype;
+        private System.Windows.Forms.TextBox textBoxSubtype;
+        private System.Windows.Forms.Label LblKeyword;
+        private System.Windows.Forms.TextBox textBoxKeyword;
     }
 }
 

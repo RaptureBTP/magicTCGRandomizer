@@ -47,9 +47,9 @@ namespace magicTCGRandomizer
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991"); //load a specific page for now. Will eventually be the random card page on gatherer
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite
+                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
@@ -89,7 +89,7 @@ namespace magicTCGRandomizer
                         }
                         else if(radioButtonOR.Checked == true) 
                         {
-                            if (countCMCColors(document) > 1) //if card is not mono-colored, skip it
+                            if (countCMCColors(document) > 1) //if card is not mono-colored, skip it //need to add list here I think?
                                 continue;
 
                             for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
@@ -130,6 +130,11 @@ namespace magicTCGRandomizer
                                 continue;
                             }
                         }
+                    }
+                    if(comboBoxCardType.Text != "Random") 
+                    {
+                        if (checkType(document, comboBoxCardType.Text) == false)
+                            continue;
                     }
                 }
 
@@ -220,6 +225,24 @@ namespace magicTCGRandomizer
             {
                 Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return 0;
+            }
+        }
+
+        public bool checkType(HtmlAgilityPack.HtmlDocument document, string type)
+        {
+            var typeRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_typeRow");
+            if(typeRow != null)
+            {
+                string cardTypes = typeRow.InnerText.ToString();
+                if (Regex.IsMatch(cardTypes, type) == true)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
+                return false;
             }
         }
     }
