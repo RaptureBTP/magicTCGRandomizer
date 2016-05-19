@@ -48,9 +48,9 @@ namespace magicTCGRandomizer
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
                     var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery common
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature common
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker mythic rare
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
                         if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
@@ -140,6 +140,11 @@ namespace magicTCGRandomizer
                     {if (checkRarity(document, comboBoxRarity.Text) == false)
                             continue;
 
+                    }
+                    if(comboBoxSet.Text != "Random")
+                    {
+                        if (checkSets(document, comboBoxSet.Text) == false)
+                            continue;
                     }
                 }
 
@@ -263,6 +268,22 @@ namespace magicTCGRandomizer
             else
             {
                 Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
+                return false;
+            }
+        }
+        public bool checkSets(HtmlAgilityPack.HtmlDocument document, string set)
+        {
+            var setsRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_otherSetsValue");
+            if(setsRow != null)
+            {
+                if (Regex.IsMatch(setsRow.InnerHtml, set))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
                 return false;
             }
         }
