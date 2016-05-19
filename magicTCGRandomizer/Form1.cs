@@ -47,9 +47,10 @@ namespace magicTCGRandomizer
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991"); //load a specific page for now. Will eventually be the random card page on gatherer
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
                         if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
@@ -60,8 +61,9 @@ namespace magicTCGRandomizer
                     if (checkBoxColorRandom.Checked != true) //if RandomColor box is not checked
                     {
                         var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                        List<string> manaSymbolColors = new List<string>(); //list of strings
 
-                        if(radioButtonAND.Checked == true) //check for AND stipulation
+                        if (radioButtonAND.Checked == true) //check for AND stipulation
                         {
                             for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
                             {
@@ -71,9 +73,13 @@ namespace magicTCGRandomizer
                                     break;
                                 }
                                 else
+                                {
                                     colorCount++;
+                                    manaSymbolColors.Add(checkedColors[i].ToString());
+                                }
                             }
-                            if (colorMismatch == true || countCMCColors(document) != colorCount) 
+                            
+                            if (colorMismatch == true || countCMCColors(document, manaSymbolColors) != colorCount) 
                             { 
                                 colorMismatch = false;
                                 colorCount = 0;
@@ -107,7 +113,7 @@ namespace magicTCGRandomizer
                                 continue;
                             }
                         }
-                        else if(radioButtonANY.Checked == true) //TODO: Might need to change this - Has to be in some combination of ALL the colors, or can CONTAIN any one of the colors?
+                        else if(radioButtonANY.Checked == true)
                         {
                             for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
                             {
@@ -182,7 +188,7 @@ namespace magicTCGRandomizer
             }
         }
         
-        public int countCMCColors(HtmlAgilityPack.HtmlDocument document)
+        public int countCMCColors(HtmlAgilityPack.HtmlDocument document, List<string> passedColors = null) //TODO: CURRENTLY DOES NOT CHECK/ACCOUNT FOR MULTIPLE OF SAME MANA SYMBOL - FIX THIS
         {
             var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
             if (manaRow != null)
@@ -197,6 +203,15 @@ namespace magicTCGRandomizer
                     {
                         webColorCount -= 1;
                         break;
+                    }
+                }
+
+                if(passedColors != null) // if passedColors contains colors
+                {
+                    foreach (string col in passedColors)
+                    {
+                        int numSelectedColor = Regex.Matches(colorList, col).Count; //count number of occurances of each mana symbol of the same type (ex. two swamps, 3 islands)
+                        webColorCount = (webColorCount - numSelectedColor) + 1; //subtract the extras from the count, but leave one count of this color
                     }
                 }
                 return webColorCount;

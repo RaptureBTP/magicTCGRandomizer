@@ -36,7 +36,6 @@
             this.numericUpDownCMC = new System.Windows.Forms.NumericUpDown();
             this.LblCardType = new System.Windows.Forms.Label();
             this.checkBoxCMCRandom = new System.Windows.Forms.CheckBox();
-            this.checkBoxExclusiveColors = new System.Windows.Forms.CheckBox();
             this.comboBoxCardType = new System.Windows.Forms.ComboBox();
             this.LblRarity = new System.Windows.Forms.Label();
             this.comboBoxRarity = new System.Windows.Forms.ComboBox();
@@ -145,16 +144,6 @@
             this.checkBoxCMCRandom.TabIndex = 7;
             this.checkBoxCMCRandom.Text = "Random";
             this.checkBoxCMCRandom.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxExclusiveColors
-            // 
-            this.checkBoxExclusiveColors.AutoSize = true;
-            this.checkBoxExclusiveColors.Location = new System.Drawing.Point(97, 312);
-            this.checkBoxExclusiveColors.Name = "checkBoxExclusiveColors";
-            this.checkBoxExclusiveColors.Size = new System.Drawing.Size(132, 21);
-            this.checkBoxExclusiveColors.TabIndex = 8;
-            this.checkBoxExclusiveColors.Text = "Exclusive Colors";
-            this.checkBoxExclusiveColors.UseVisualStyleBackColor = true;
             // 
             // comboBoxCardType
             // 
@@ -388,7 +377,6 @@
             this.Controls.Add(this.comboBoxRarity);
             this.Controls.Add(this.LblRarity);
             this.Controls.Add(this.comboBoxCardType);
-            this.Controls.Add(this.checkBoxExclusiveColors);
             this.Controls.Add(this.checkBoxCMCRandom);
             this.Controls.Add(this.LblCardType);
             this.Controls.Add(this.numericUpDownCMC);
@@ -416,7 +404,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownCMC;
         private System.Windows.Forms.Label LblCardType;
         private System.Windows.Forms.CheckBox checkBoxCMCRandom;
-        private System.Windows.Forms.CheckBox checkBoxExclusiveColors;
         private System.Windows.Forms.ComboBox comboBoxCardType;
         private System.Windows.Forms.Label LblRarity;
         private System.Windows.Forms.ComboBox comboBoxRarity;
