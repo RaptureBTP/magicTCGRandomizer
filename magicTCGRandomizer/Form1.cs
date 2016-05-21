@@ -146,6 +146,18 @@ namespace magicTCGRandomizer
                         if (checkSets(document, comboBoxSet.Text) == false)
                             continue;
                     }
+
+                    //card met all requirements 
+                    //get card url
+                    var picture = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage");
+                    string picHTML = picture.OuterHtml;
+                    string imgMatch = Regex.Match(picHTML, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
+                    imgMatch = imgMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
+
+                    string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
+                    
+                    pictureBoxCard.Load(totalImgURL);
+                    return;
                 }
 
 

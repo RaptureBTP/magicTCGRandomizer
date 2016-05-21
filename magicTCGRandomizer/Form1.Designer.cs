@@ -340,10 +340,10 @@
             // pictureBoxCard
             // 
             this.pictureBoxCard.Location = new System.Drawing.Point(616, 23);
-            this.pictureBoxCard.MaximumSize = new System.Drawing.Size(223, 310);
+            this.pictureBoxCard.MaximumSize = new System.Drawing.Size(400, 400);
             this.pictureBoxCard.MinimumSize = new System.Drawing.Size(223, 310);
             this.pictureBoxCard.Name = "pictureBoxCard";
-            this.pictureBoxCard.Size = new System.Drawing.Size(223, 310);
+            this.pictureBoxCard.Size = new System.Drawing.Size(348, 376);
             this.pictureBoxCard.TabIndex = 22;
             this.pictureBoxCard.TabStop = false;
             // 
@@ -404,7 +404,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(851, 681);
+            this.ClientSize = new System.Drawing.Size(994, 681);
             this.Controls.Add(this.textBoxKeyword);
             this.Controls.Add(this.LblKeyword);
             this.Controls.Add(this.textBoxSubtype);
