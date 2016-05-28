@@ -55,6 +55,8 @@
             this.textBoxSubtype = new System.Windows.Forms.TextBox();
             this.LblKeyword = new System.Windows.Forms.Label();
             this.textBoxKeyword = new System.Windows.Forms.TextBox();
+            this.textBoxName = new System.Windows.Forms.TextBox();
+            this.labelName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
@@ -315,7 +317,6 @@
             this.radioButtonAND.Name = "radioButtonAND";
             this.radioButtonAND.Size = new System.Drawing.Size(239, 21);
             this.radioButtonAND.TabIndex = 19;
-            this.radioButtonAND.TabStop = true;
             this.radioButtonAND.Text = "AND (must be all checked colors)";
             this.radioButtonAND.UseVisualStyleBackColor = true;
             // 
@@ -326,13 +327,13 @@
             this.radioButtonOR.Name = "radioButtonOR";
             this.radioButtonOR.Size = new System.Drawing.Size(322, 21);
             this.radioButtonOR.TabIndex = 20;
-            this.radioButtonOR.TabStop = true;
             this.radioButtonOR.Text = "OR (can be any one color of the above colors)";
             this.radioButtonOR.UseVisualStyleBackColor = true;
             // 
             // radioButtonANY
             // 
             this.radioButtonANY.AutoSize = true;
+            this.radioButtonANY.Checked = true;
             this.radioButtonANY.Location = new System.Drawing.Point(16, 274);
             this.radioButtonANY.Name = "radioButtonANY";
             this.radioButtonANY.Size = new System.Drawing.Size(336, 21);
@@ -353,7 +354,7 @@
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(373, 205);
+            this.textBoxOutput.Location = new System.Drawing.Point(370, 242);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.Size = new System.Drawing.Size(232, 130);
@@ -363,7 +364,7 @@
             // 
             this.LblOutput.AutoSize = true;
             this.LblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblOutput.Location = new System.Drawing.Point(370, 185);
+            this.LblOutput.Location = new System.Drawing.Point(367, 222);
             this.LblOutput.Name = "LblOutput";
             this.LblOutput.Size = new System.Drawing.Size(67, 17);
             this.LblOutput.TabIndex = 24;
@@ -404,11 +405,30 @@
             this.textBoxKeyword.Size = new System.Drawing.Size(121, 22);
             this.textBoxKeyword.TabIndex = 28;
             // 
+            // textBoxName
+            // 
+            this.textBoxName.Location = new System.Drawing.Point(292, 176);
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(100, 22);
+            this.textBoxName.TabIndex = 29;
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelName.Location = new System.Drawing.Point(289, 157);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(54, 17);
+            this.labelName.TabIndex = 30;
+            this.labelName.Text = "Name:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(994, 681);
+            this.Controls.Add(this.labelName);
+            this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.textBoxKeyword);
             this.Controls.Add(this.LblKeyword);
             this.Controls.Add(this.textBoxSubtype);
@@ -474,6 +494,8 @@
         private System.Windows.Forms.TextBox textBoxSubtype;
         private System.Windows.Forms.Label LblKeyword;
         private System.Windows.Forms.TextBox textBoxKeyword;
+        private System.Windows.Forms.TextBox textBoxName;
+        private System.Windows.Forms.Label labelName;
     }
 }
 

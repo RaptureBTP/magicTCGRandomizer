@@ -29,26 +29,73 @@ namespace magicTCGRandomizer
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
 
                 string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
-                string searchURL= "";
+                string searchURL= baseURL;
+                bool prefixed = false;
 
+                //name
+                if (textBoxName.Text != "")
+                { 
+                    //split on word in textbox
+                    string[] nameWords = textBoxName.Text.Split();
+
+                    searchURL += "name=";
+
+                    foreach(string name in nameWords)
+                    {
+                        searchURL += "+[" + name + "]";
+                    }
+                    prefixed = true;
+                }
+
+                //color
                 if (checkBoxColorRandom.Checked != true) //if RandomCMC checkbox is not checked
                 {
-                    var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
-                    searchURL = baseURL + "color=|";
-                    //List<string> manaSymbolColors = new List<string>(); //list of strings
-                    if (checkedColors.Contains("White"))
-                        searchURL += "[W]";
-                    if (checkedColors.Contains("Blue"))
-                        searchURL += "[U]";
-                    if (checkedColors.Contains("Black"))
-                        searchURL += "[B]";
-                    if (checkedColors.Contains("Red"))
-                        searchURL += "[R]";
-                    if (checkedColors.Contains("Green"))
-                        searchURL += "[G]";
+                    if (radioButtonAND.Checked == true)
+                    {
+
+                    }
+                    else if (radioButtonOR.Checked == true)
+                    {
+
+                    }
+                    else
+                    {
+                        var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                        if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
+                            searchURL += "&";
+                        searchURL += "color=|";
+                        prefixed = true;
+
+                        if (checkedColors.Contains("White"))
+                            searchURL += "[W]";
+                        if (checkedColors.Contains("Blue"))
+                            searchURL += "[U]";
+                        if (checkedColors.Contains("Black"))
+                            searchURL += "[B]";
+                        if (checkedColors.Contains("Red"))
+                            searchURL += "[R]";
+                        if (checkedColors.Contains("Green"))
+                            searchURL += "[G]";
+                    }
+                }
+
+                //format
+
+                //set
+
+                //type
+                if (comboBoxCardType.Text != "Random")
+                {
+                    if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
+                        searchURL += "&";
+                    searchURL += "type=+[" + comboBoxCardType.Text +"]";
+                    prefixed = true;
                 }
 
                 var document = getHtmlWeb.Load(searchURL);
+
+
+                prefixed = false;
             }
             catch(Exception exp)
             {
