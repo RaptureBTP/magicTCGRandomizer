@@ -36,12 +36,16 @@ namespace magicTCGRandomizer
                     var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
                     searchURL = baseURL + "color=|";
                     //List<string> manaSymbolColors = new List<string>(); //list of strings
-                    for (int i = 0; i < checkedColors.Count; i++)
-                    {
-                        if (checkedColors[i].ToString() == "Red")
-                            searchURL += "[R]";
-                    }
-                    
+                    if (checkedColors.Contains("White"))
+                        searchURL += "[W]";
+                    if (checkedColors.Contains("Blue"))
+                        searchURL += "[U]";
+                    if (checkedColors.Contains("Black"))
+                        searchURL += "[B]";
+                    if (checkedColors.Contains("Red"))
+                        searchURL += "[R]";
+                    if (checkedColors.Contains("Green"))
+                        searchURL += "[G]";
                 }
 
                 var document = getHtmlWeb.Load(searchURL);
