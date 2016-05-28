@@ -24,6 +24,32 @@ namespace magicTCGRandomizer
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
+
+                string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
+                string searchURL= "";
+
+                if (checkBoxColorRandom.Checked != true) //if RandomCMC checkbox is not checked
+                {
+                    var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                    searchURL = baseURL + "color=|";
+                    //List<string> manaSymbolColors = new List<string>(); //list of strings
+                    for (int i = 0; i < checkedColors.Count; i++)
+                    {
+                        if (checkedColors[i].ToString() == "Red")
+                            searchURL += "[R]";
+                    }
+                    
+                }
+
+                var document = getHtmlWeb.Load(searchURL);
+            }
+            catch(Exception exp)
+            {
+
+            }
             try {
                 //ScrapingBrowser Browser = new ScrapingBrowser();
                 //Browser.AutoDownloadPagesResources = true;
@@ -47,10 +73,12 @@ namespace magicTCGRandomizer
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random"); //load a specific page for now. Will eventually be the random card page on gatherer
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery common
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature common
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker mythic rare
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=389600 = Moss diamond artifact
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random random
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
                         if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
@@ -113,7 +141,7 @@ namespace magicTCGRandomizer
                                 continue;
                             }
                         }
-                        else if(radioButtonANY.Checked == true)
+                        else if(radioButtonANY.Checked == true) //problem here
                         {
                             for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
                             {
@@ -157,6 +185,7 @@ namespace magicTCGRandomizer
                     string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
                     
                     pictureBoxCard.Load(totalImgURL);
+                    cardFound = true;
                     return;
                 }
 
@@ -187,7 +216,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct CMC id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct CMC id on the page.");
                 return false;
             }
             if(result.Equals(cmc))
@@ -210,7 +239,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return false;
             }
         }
@@ -245,7 +274,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return 0;
             }
         }
@@ -263,7 +292,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
                 return false;
             }
         }
@@ -279,7 +308,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
                 return false;
             }
         }
@@ -295,7 +324,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
                 return false;
             }
         }

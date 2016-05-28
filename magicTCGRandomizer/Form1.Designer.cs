@@ -141,6 +141,8 @@
             // checkBoxCMCRandom
             // 
             this.checkBoxCMCRandom.AutoSize = true;
+            this.checkBoxCMCRandom.Checked = true;
+            this.checkBoxCMCRandom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCMCRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCMCRandom.Location = new System.Drawing.Point(203, 57);
             this.checkBoxCMCRandom.Name = "checkBoxCMCRandom";
@@ -296,6 +298,8 @@
             // checkBoxColorRandom
             // 
             this.checkBoxColorRandom.AutoSize = true;
+            this.checkBoxColorRandom.Checked = true;
+            this.checkBoxColorRandom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxColorRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxColorRandom.Location = new System.Drawing.Point(70, 58);
             this.checkBoxColorRandom.Name = "checkBoxColorRandom";
