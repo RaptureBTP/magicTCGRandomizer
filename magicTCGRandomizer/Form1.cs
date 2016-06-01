@@ -80,8 +80,22 @@ namespace magicTCGRandomizer
                 }
 
                 //format
+                if(comboBoxFormat.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "format=[\"" + comboBoxFormat.Text + "\"]";
+                    prefixed = true;
+                }
 
                 //set
+                if(comboBoxSet.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "set=[\"" + comboBoxSet.Text + "\"]";
+                    prefixed = true;
+                }
 
                 //type
                 if (comboBoxCardType.Text != "Random")
@@ -90,6 +104,14 @@ namespace magicTCGRandomizer
                         searchURL += "&";
                     searchURL += "type=+[" + comboBoxCardType.Text +"]";
                     prefixed = true;
+                }
+
+                //subtype
+                if(textBoxSubtype.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "subtype=+[" + textBoxSubtype.Text + "]";
                 }
 
                 var document = getHtmlWeb.Load(searchURL);
@@ -101,7 +123,7 @@ namespace magicTCGRandomizer
             {
 
             }
-            try {
+            /*try {
                 //ScrapingBrowser Browser = new ScrapingBrowser();
                 //Browser.AutoDownloadPagesResources = true;
                 //Browser.AllowAutoRedirect = true; // Browser has settings you can access in setup
@@ -241,19 +263,19 @@ namespace magicTCGRandomizer
                 }
 
 
-                /*var nodes = document.DocumentNode.SelectNodes("//div[@id='ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow']");
+                var nodes = document.DocumentNode.SelectNodes("//div[@id='ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow']");
                 if (nodes != null)
                 {
                     foreach (HtmlAgilityPack.HtmlNode node in nodes)
                     {
                         MessageBox.Show(node.InnerText);
                     }
-                }*/
+                }
             }
             catch(Exception exp)
             {
                 Console.WriteLine(exp);
-            }
+            } */
         }
 
         public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
