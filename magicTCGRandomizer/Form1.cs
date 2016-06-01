@@ -118,6 +118,19 @@ namespace magicTCGRandomizer
 
 
                 prefixed = false;
+
+                var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
+                var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];  //table containing the tables (each table is a card)
+                //div , table , tr, td
+                //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
+                //test with no results
+
+                //check if there are multiple pages to look through
+                var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+                if (pageControlContainer != null)
+                {
+
+                }
             }
             catch(Exception exp)
             {
