@@ -97,6 +97,7 @@
             this.ColorListCheckBox.Name = "ColorListCheckBox";
             this.ColorListCheckBox.Size = new System.Drawing.Size(133, 123);
             this.ColorListCheckBox.TabIndex = 2;
+            this.ColorListCheckBox.SelectedIndexChanged += new System.EventHandler(this.ColorListCheckBox_SelectedIndexChanged);
             // 
             // LblColor
             // 
@@ -129,6 +130,7 @@
             this.numericUpDownCMC.Name = "numericUpDownCMC";
             this.numericUpDownCMC.Size = new System.Drawing.Size(74, 22);
             this.numericUpDownCMC.TabIndex = 5;
+            this.numericUpDownCMC.ValueChanged += new System.EventHandler(this.numericUpDownCMC_ValueChanged);
             // 
             // LblCardType
             // 
@@ -152,6 +154,7 @@
             this.checkBoxCMCRandom.TabIndex = 7;
             this.checkBoxCMCRandom.Text = "Random";
             this.checkBoxCMCRandom.UseVisualStyleBackColor = true;
+            this.checkBoxCMCRandom.CheckedChanged += new System.EventHandler(this.checkBoxCMCRandom_CheckedChanged);
             // 
             // comboBoxCardType
             // 
@@ -309,6 +312,7 @@
             this.checkBoxColorRandom.TabIndex = 18;
             this.checkBoxColorRandom.Text = "Random";
             this.checkBoxColorRandom.UseVisualStyleBackColor = true;
+            this.checkBoxColorRandom.CheckedChanged += new System.EventHandler(this.checkBoxColorRandom_CheckedChanged);
             // 
             // radioButtonAND
             // 

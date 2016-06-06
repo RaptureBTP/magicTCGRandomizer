@@ -414,5 +414,38 @@ namespace magicTCGRandomizer
                 return false;
             }
         }
+
+        private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+            {
+                for (int i = 0; i < ColorListCheckBox.Items.Count; i++)
+                {
+                    ColorListCheckBox.SetItemChecked(i, false);
+                }
+            }
+        }
+
+        private void ColorListCheckBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+                checkBoxColorRandom.Checked = false;
+        }
+
+        private void checkBoxCMCRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+            {
+                if (numericUpDownCMC.Value != 0)
+                    numericUpDownCMC.Value = 0;
+                checkBoxCMCRandom.Checked = true;
+            }
+        }
+
+        private void numericUpDownCMC_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+                checkBoxCMCRandom.Checked = false;
+        }
     }
 }
