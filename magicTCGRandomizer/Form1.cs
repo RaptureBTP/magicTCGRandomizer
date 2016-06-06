@@ -24,7 +24,119 @@ namespace magicTCGRandomizer
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
+                var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
+
+                string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
+                string searchURL= baseURL;
+                bool prefixed = false;
+
+                //name
+                if (textBoxName.Text != "")
+                { 
+                    //split on word in textbox
+                    string[] nameWords = textBoxName.Text.Split();
+
+                    searchURL += "name=";
+
+                    foreach(string name in nameWords)
+                    {
+                        searchURL += "+[" + name + "]";
+                    }
+                    prefixed = true;
+                }
+
+                //color
+                if (checkBoxColorRandom.Checked != true) //if RandomCMC checkbox is not checked
+                {
+                    if (radioButtonAND.Checked == true)
+                    {
+
+                    }
+                    else if (radioButtonOR.Checked == true)
+                    {
+
+                    }
+                    else
+                    {
+                        var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                        if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
+                            searchURL += "&";
+                        searchURL += "color=|";
+                        prefixed = true;
+
+                        if (checkedColors.Contains("White"))
+                            searchURL += "[W]";
+                        if (checkedColors.Contains("Blue"))
+                            searchURL += "[U]";
+                        if (checkedColors.Contains("Black"))
+                            searchURL += "[B]";
+                        if (checkedColors.Contains("Red"))
+                            searchURL += "[R]";
+                        if (checkedColors.Contains("Green"))
+                            searchURL += "[G]";
+                    }
+                }
+
+                //format
+                if(comboBoxFormat.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "format=[\"" + comboBoxFormat.Text + "\"]";
+                    prefixed = true;
+                }
+
+                //set
+                if(comboBoxSet.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "set=[\"" + comboBoxSet.Text + "\"]";
+                    prefixed = true;
+                }
+
+                //type
+                if (comboBoxCardType.Text != "Random")
+                {
+                    if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
+                        searchURL += "&";
+                    searchURL += "type=+[" + comboBoxCardType.Text +"]";
+                    prefixed = true;
+                }
+
+                //subtype
+                if(textBoxSubtype.Text != "Random")
+                {
+                    if (prefixed == true)
+                        searchURL += "&";
+                    searchURL += "subtype=+[" + textBoxSubtype.Text + "]";
+                }
+
+                var document = getHtmlWeb.Load(searchURL);
+
+
+                prefixed = false;
+
+                var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
+                var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];  //table containing the tables (each table is a card)
+                //div , table , tr, td
+                //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
+                //test with no results
+
+                //check if there are multiple pages to look through
+                var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+                if (pageControlContainer != null)
+                {
+
+                }
+            }
+            catch(Exception exp)
+            {
+
+            }
+            /*try {
                 //ScrapingBrowser Browser = new ScrapingBrowser();
                 //Browser.AutoDownloadPagesResources = true;
                 //Browser.AllowAutoRedirect = true; // Browser has settings you can access in setup
@@ -47,10 +159,12 @@ namespace magicTCGRandomizer
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
                 while(cardFound == false) //loop until card meeting criteria is matched
                 {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483"); //load a specific page for now. Will eventually be the random card page on gatherer
+                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random"); //load a specific page for now. Will eventually be the random card page on gatherer
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery common
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature common
                     //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker mythic rare
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=389600 = Moss diamond artifact
+                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random random
                     if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
                     {
                         if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
@@ -113,7 +227,7 @@ namespace magicTCGRandomizer
                                 continue;
                             }
                         }
-                        else if(radioButtonANY.Checked == true)
+                        else if(radioButtonANY.Checked == true) //problem here
                         {
                             for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
                             {
@@ -157,23 +271,24 @@ namespace magicTCGRandomizer
                     string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
                     
                     pictureBoxCard.Load(totalImgURL);
+                    cardFound = true;
                     return;
                 }
 
 
-                /*var nodes = document.DocumentNode.SelectNodes("//div[@id='ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow']");
+                var nodes = document.DocumentNode.SelectNodes("//div[@id='ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow']");
                 if (nodes != null)
                 {
                     foreach (HtmlAgilityPack.HtmlNode node in nodes)
                     {
                         MessageBox.Show(node.InnerText);
                     }
-                }*/
+                }
             }
             catch(Exception exp)
             {
                 Console.WriteLine(exp);
-            }
+            } */
         }
 
         public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
@@ -187,7 +302,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct CMC id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct CMC id on the page.");
                 return false;
             }
             if(result.Equals(cmc))
@@ -210,7 +325,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return false;
             }
         }
@@ -245,7 +360,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
                 return 0;
             }
         }
@@ -263,7 +378,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
                 return false;
             }
         }
@@ -279,7 +394,7 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
                 return false;
             }
         }
@@ -295,9 +410,42 @@ namespace magicTCGRandomizer
             }
             else
             {
-                Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
+                //Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
                 return false;
             }
+        }
+
+        private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+            {
+                for (int i = 0; i < ColorListCheckBox.Items.Count; i++)
+                {
+                    ColorListCheckBox.SetItemChecked(i, false);
+                }
+            }
+        }
+
+        private void ColorListCheckBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+                checkBoxColorRandom.Checked = false;
+        }
+
+        private void checkBoxCMCRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+            {
+                if (numericUpDownCMC.Value != 0)
+                    numericUpDownCMC.Value = 0;
+                checkBoxCMCRandom.Checked = true;
+            }
+        }
+
+        private void numericUpDownCMC_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+                checkBoxCMCRandom.Checked = false;
         }
     }
 }
