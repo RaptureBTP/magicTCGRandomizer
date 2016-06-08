@@ -12,6 +12,7 @@ using ScrapySharp.Extensions;
 using ScrapySharp.Network;
 using ScrapySharp.Html.Forms;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace magicTCGRandomizer
 {
@@ -22,25 +23,104 @@ namespace magicTCGRandomizer
             InitializeComponent();
         }
 
+        bool cardFound = false;
+
+        public void updateTextBox(string msg)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(textBoxOutput.AppendText), msg);
+            }
+            else
+            {
+                textBoxOutput.AppendText(msg);
+            }
+            //textBoxOutput.Text += msg;
+        }
+
+        public string getTextFromForm(string location)
+        {
+            if(location == "format")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return comboBoxFormat.Text;
+                    });
+                }
+                else
+                    return comboBoxFormat.Text;
+            }
+            else if(location == "set")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return comboBoxSet.Text;
+                    });
+                }
+                else
+                    return comboBoxSet.Text;
+            }
+            else if(location == "type")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return comboBoxCardType.Text;
+                    });
+                }
+                else
+                    return comboBoxCardType.Text;
+            }
+            else if(location == "subtype")
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return textBoxSubtype.Text;
+                    });
+                }
+                else
+                    return textBoxSubtype.Text;
+            return "error";
+        }
+
         private void buttonSearch_Click(object sender, EventArgs e)
+        {
+
+            Thread searchThread = new Thread(cardSearch);
+            searchThread.Start();
+
+            /*while(cardFound == false)
+            {
+                //loop and wait for thread to finish
+            }*/ 
+            
+        }
+
+        public void cardSearch()
         {
             try
             {
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
 
                 string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
-                string searchURL= baseURL;
+                string searchURL = baseURL;
                 bool prefixed = false;
 
                 //name
                 if (textBoxName.Text != "")
-                { 
+                {
                     //split on word in textbox
                     string[] nameWords = textBoxName.Text.Split();
 
                     searchURL += "name=";
 
-                    foreach(string name in nameWords)
+                    foreach (string name in nameWords)
                     {
                         searchURL += "+[" + name + "]";
                     }
@@ -79,43 +159,51 @@ namespace magicTCGRandomizer
                     }
                 }
 
+                updateTextBox("Thread Start\r\n");
+
                 //format
-                if(comboBoxFormat.Text != "Random")
+                //if (comboBoxFormat.Text != "Random")
+                string format = getTextFromForm("format");
+                if(format != "Random")
                 {
                     if (prefixed == true)
                         searchURL += "&";
-                    searchURL += "format=[\"" + comboBoxFormat.Text + "\"]";
+                    searchURL += "format=[\"" + format + "\"]";
                     prefixed = true;
                 }
 
                 //set
-                if(comboBoxSet.Text != "Random")
+                string set = getTextFromForm("set");
+                if (set != "Random")
                 {
                     if (prefixed == true)
                         searchURL += "&";
-                    searchURL += "set=[\"" + comboBoxSet.Text + "\"]";
+                    searchURL += "set=[\"" + set + "\"]";
                     prefixed = true;
                 }
 
                 //type
-                if (comboBoxCardType.Text != "Random")
+                string type = getTextFromForm("type");
+                if (type != "Random")
                 {
                     if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
                         searchURL += "&";
-                    searchURL += "type=+[" + comboBoxCardType.Text +"]";
+                    searchURL += "type=+[" + type + "]";
                     prefixed = true;
                 }
 
                 //subtype
-                if(textBoxSubtype.Text != "Random")
+                string subtype = getTextFromForm("subtype");
+                if (subtype != "Random")
                 {
                     if (prefixed == true)
                         searchURL += "&";
-                    searchURL += "subtype=+[" + textBoxSubtype.Text + "]";
+                    searchURL += "subtype=+[" + subtype + "]";
                 }
 
                 var document = getHtmlWeb.Load(searchURL);
 
+                while(true)
 
                 prefixed = false;
 
@@ -125,173 +213,24 @@ namespace magicTCGRandomizer
                 //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
                 //test with no results
 
+                //temp
+                updateTextBox("Thread end.\r\n");
+                //cardFound = true;
+
                 //check if there are multiple pages to look through
-                var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+                /*var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
                 if (pageControlContainer != null)
                 {
 
-                }
+                }*/
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
 
             }
-            /*try {
-                //ScrapingBrowser Browser = new ScrapingBrowser();
-                //Browser.AutoDownloadPagesResources = true;
-                //Browser.AllowAutoRedirect = true; // Browser has settings you can access in setup
-                //Browser.AllowMetaRedirect = true;
-                //var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random");
-                //WebPage home = Browser.NavigateToPage(new Uri("http://www.ietf.org"));
-                //WebPage PageResult = Browser.NavigateToPage(new Uri("http://gatherer.wizards.com/Pages/Default.aspx"));
-                //WebPage PageResult = Browser.NavigateToPage(new Uri("http://gatherer.wizards.com/Pages/Advanced.aspx"));
-                //webBrowser1.Navigate(new Uri("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random"));
-                //WebPage PageResult = Browser.NavigateToPage(new Uri("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random"));
-                //HtmlNode ColorNode = PageResult.Html.CssSelect("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow > div:nth-child(2) > img:nth-child(1)").First();
-                //HtmlNode TitleNode = PageResult.Html.CssSelect("#ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage").First();
-
-                bool cardFound = false;
-                bool colorMismatch = false;
-                bool colorMatch = false;
-                bool tooManyColors = false;
-                int colorCount = 0;
-
-                var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
-                while(cardFound == false) //loop until card meeting criteria is matched
-                {
-                    var document = getHtmlWeb.Load("http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random"); //load a specific page for now. Will eventually be the random card page on gatherer
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=368483 = blightning sorcery common
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132069 = cloud sprite creature common
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=260991 = nicol bolas planeswalker mythic rare
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=389600 = Moss diamond artifact
-                    //http://gatherer.wizards.com/Pages/Card/Details.aspx?action=random random
-                    if (checkBoxCMCRandom.Checked != true) //if RandomCMC checkbox is not checked
-                    {
-                        if (checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //check cards CMC against specified CMC
-                        {
-                            continue; //CMC didn't match, keep looping
-                        }
-                    }
-                    if (checkBoxColorRandom.Checked != true) //if RandomColor box is not checked
-                    {
-                        var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
-                        List<string> manaSymbolColors = new List<string>(); //list of strings
-
-                        if (radioButtonAND.Checked == true) //check for AND stipulation
-                        {
-                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
-                            {
-                                if (checkMana(document, checkedColors[i].ToString()) == false)
-                                {
-                                    colorMismatch = true; //at least one of the colors didnt match
-                                    break;
-                                }
-                                else
-                                {
-                                    colorCount++;
-                                    manaSymbolColors.Add(checkedColors[i].ToString());
-                                }
-                            }
-                            
-                            if (colorMismatch == true || countCMCColors(document, manaSymbolColors) != colorCount) 
-                            { 
-                                colorMismatch = false;
-                                colorCount = 0;
-                                continue; //loop to a new random card
-                            }
-                            colorCount = 0;
-                        }
-                        else if(radioButtonOR.Checked == true) 
-                        {
-                            if (countCMCColors(document) > 1) //if card is not mono-colored, skip it //need to add list here I think?
-                                continue;
-
-                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
-                            {
-                                if (checkMana(document, checkedColors[i].ToString()) == true)
-                                {
-                                    if(colorMatch == false)
-                                    {
-                                        colorMatch = true;
-                                    }
-                                    else
-                                    {
-                                        colorMatch = false;
-                                        tooManyColors = true;
-                                    }
-                                }
-                            }
-                            if (tooManyColors == true || colorMatch == false)
-                            {
-                                tooManyColors = false;
-                                continue;
-                            }
-                        }
-                        else if(radioButtonANY.Checked == true) //problem here
-                        {
-                            for (int i = 0; i < checkedColors.Count; i++) //loop over each index (each checked item)
-                            {
-                                if (checkMana(document, checkedColors[i].ToString()) == true)
-                                {
-                                    colorMatch = true; //at least one of the colors matched 
-                                    break;
-                                }
-                            }
-                            
-                            if (colorMatch == false)
-                            {
-                                colorMatch = false; //?
-                                continue;
-                            }
-                        }
-                    }
-                    if(comboBoxCardType.Text != "Random") 
-                    {
-                        if (checkType(document, comboBoxCardType.Text) == false)
-                            continue;
-                    }
-                    if(comboBoxRarity.Text != "Random")
-                    {if (checkRarity(document, comboBoxRarity.Text) == false)
-                            continue;
-
-                    }
-                    if(comboBoxSet.Text != "Random")
-                    {
-                        if (checkSets(document, comboBoxSet.Text) == false)
-                            continue;
-                    }
-
-                    //card met all requirements 
-                    //get card url
-                    var picture = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage");
-                    string picHTML = picture.OuterHtml;
-                    string imgMatch = Regex.Match(picHTML, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
-                    imgMatch = imgMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
-
-                    string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
-                    
-                    pictureBoxCard.Load(totalImgURL);
-                    cardFound = true;
-                    return;
-                }
-
-
-                var nodes = document.DocumentNode.SelectNodes("//div[@id='ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow']");
-                if (nodes != null)
-                {
-                    foreach (HtmlAgilityPack.HtmlNode node in nodes)
-                    {
-                        MessageBox.Show(node.InnerText);
-                    }
-                }
-            }
-            catch(Exception exp)
-            {
-                Console.WriteLine(exp);
-            } */
         }
 
-        public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
+        /* public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
         {
             string result = "";
             var CMCNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow"); //find the CMC element via ID
@@ -413,7 +352,7 @@ namespace magicTCGRandomizer
                 //Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
                 return false;
             }
-        }
+        } */
 
         private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
         {
