@@ -106,6 +106,8 @@ namespace magicTCGRandomizer
         {
             try
             {
+                updateTextBox("Thread Start\r\n");
+
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
 
                 string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
@@ -125,6 +127,7 @@ namespace magicTCGRandomizer
                         searchURL += "+[" + name + "]";
                     }
                     prefixed = true;
+                    updateTextBox("Name added to URL\r\n");
                 }
 
                 //color
@@ -156,10 +159,9 @@ namespace magicTCGRandomizer
                             searchURL += "[R]";
                         if (checkedColors.Contains("Green"))
                             searchURL += "[G]";
+                        updateTextBox("Colors added to URL\r\n");
                     }
                 }
-
-                updateTextBox("Thread Start\r\n");
 
                 //format
                 //if (comboBoxFormat.Text != "Random")
@@ -180,6 +182,7 @@ namespace magicTCGRandomizer
                         searchURL += "&";
                     searchURL += "set=[\"" + set + "\"]";
                     prefixed = true;
+                    updateTextBox("Set added to URL\r\n");
                 }
 
                 //type
@@ -190,6 +193,7 @@ namespace magicTCGRandomizer
                         searchURL += "&";
                     searchURL += "type=+[" + type + "]";
                     prefixed = true;
+                    updateTextBox("Type added to URL\r\n");
                 }
 
                 //subtype
@@ -199,22 +203,27 @@ namespace magicTCGRandomizer
                     if (prefixed == true)
                         searchURL += "&";
                     searchURL += "subtype=+[" + subtype + "]";
+                    updateTextBox("Subtype added to URL\r\n");
                 }
 
                 var document = getHtmlWeb.Load(searchURL);
 
-                while(true)
+                if (document != null)
+                    updateTextBox("Web page found\r\n");
+                else
+                    updateTextBox("Web page not found\r\n");
 
                 prefixed = false;
 
                 var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
+                //is not null even with no results
+
                 var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];  //table containing the tables (each table is a card)
                 //div , table , tr, td
                 //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
-                //test with no results
 
                 //temp
-                updateTextBox("Thread end.\r\n");
+                updateTextBox("Thread end\r\n");
                 //cardFound = true;
 
                 //check if there are multiple pages to look through
@@ -224,9 +233,15 @@ namespace magicTCGRandomizer
 
                 }*/
             }
+            catch(ArgumentOutOfRangeException argExp)
+            {
+                updateTextBox("No results meeting criteria found.\r\n");
+                updateTextBox("Thread end\r\n");
+            }
             catch (Exception exp)
             {
-
+                updateTextBox("Something went wrong.\r\n");
+                updateTextBox("Thread end\r\n");
             }
         }
 
