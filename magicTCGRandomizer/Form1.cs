@@ -40,7 +40,7 @@ namespace magicTCGRandomizer
 
         public string getTextFromForm(string location)
         {
-            if(location == "format")
+            if (location == "format")
             {
                 if (InvokeRequired)
                 {
@@ -52,7 +52,7 @@ namespace magicTCGRandomizer
                 else
                     return comboBoxFormat.Text;
             }
-            else if(location == "set")
+            else if (location == "set")
             {
                 if (InvokeRequired)
                 {
@@ -64,7 +64,7 @@ namespace magicTCGRandomizer
                 else
                     return comboBoxSet.Text;
             }
-            else if(location == "type")
+            else if (location == "type")
             {
                 if (InvokeRequired)
                 {
@@ -76,7 +76,8 @@ namespace magicTCGRandomizer
                 else
                     return comboBoxCardType.Text;
             }
-            else if(location == "subtype")
+            else if (location == "subtype")
+            {
                 if (InvokeRequired)
                 {
                     return (string)Invoke((Func<string>)delegate
@@ -86,6 +87,19 @@ namespace magicTCGRandomizer
                 }
                 else
                     return textBoxSubtype.Text;
+            }
+            else if (location == "rarity")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return comboBoxRarity.Text;
+                    });
+                }
+                else
+                    return comboBoxRarity.Text;
+            }
             return "error";
         }
 
@@ -164,7 +178,6 @@ namespace magicTCGRandomizer
                 }
 
                 //format
-                //if (comboBoxFormat.Text != "Random")
                 string format = getTextFromForm("format");
                 if(format != "Random")
                 {
@@ -215,23 +228,63 @@ namespace magicTCGRandomizer
 
                 prefixed = false;
 
-                var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
-                //is not null even with no results
-
-                var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];  //table containing the tables (each table is a card)
-                //div , table , tr, td
-                //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
-
-                //temp
-                updateTextBox("Thread end\r\n");
-                //cardFound = true;
-
-                //check if there are multiple pages to look through
-                /*var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
-                if (pageControlContainer != null)
+                if(document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardComponent0") != null) //if this ID exists, its a single card page result
                 {
+                    updateTextBox("Found single result.\r\n");
+                    if(checkBoxCMCRandom.Checked != true) 
+                    {
+                        if(checkCMC(document, numericUpDownCMC.Value.ToString()) == false) //if the CMC of the card does not match the desired CMC
+                        {
+                            updateTextBox("No match found.\r\n");
+                            return;
+                        }
+                    }
+                    if(!(getTextFromForm("rarity").Equals("Random"))) //if Rarity is not random
+                    {
+                        if (checkRarity(document, getTextFromForm("rarity")) == false) //if it does not match the cards rarity
+                        {
+                            updateTextBox("No match found.\r\n");
+                            return;
+                        }
+                    }
 
-                }*/
+                    //check for keyword
+
+                    //display card, and card name?
+                    var cardImgNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage");
+                    //var cardImgNode = cardNode.ChildNodes[1];
+                    string picHTML = cardImgNode.OuterHtml;
+                    string imgMatch = Regex.Match(picHTML, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
+                    imgMatch = imgMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
+                    string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
+                    
+                    pictureBoxCard.Load(totalImgURL);
+                    updateTextBox("Single result found!\r\n");
+                }
+                else
+                {
+                    var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
+                    //is not null even with no results
+
+                    var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];
+                    //table containing the tables (each table is a card)
+                    //div , table , tr, td
+                    //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
+                    //need to account for it finding one result and taking you directly to the page
+
+                    updateTextBox("Found multiple results.\r\n");
+                    //temp
+                    updateTextBox("Thread end\r\n");
+                    //cardFound = true;
+
+                    //check if there are multiple pages to look through
+                    /*var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+                    if (pageControlContainer != null)
+                    {
+
+                    }*/
+                }
+
             }
             catch(ArgumentOutOfRangeException argExp)
             {
@@ -245,7 +298,7 @@ namespace magicTCGRandomizer
             }
         }
 
-        /* public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
+        public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
         {
             string result = "";
             var CMCNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow"); //find the CMC element via ID
@@ -264,7 +317,7 @@ namespace magicTCGRandomizer
             else
                 return false;
         }
-        
+        /*
         public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
         {
             var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
@@ -336,6 +389,7 @@ namespace magicTCGRandomizer
                 return false;
             }
         }
+        */
         public bool checkRarity(HtmlAgilityPack.HtmlDocument document, string rarity)
         {
             var rarityRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rarityRow");
@@ -352,6 +406,7 @@ namespace magicTCGRandomizer
                 return false;
             }
         }
+        /*
         public bool checkSets(HtmlAgilityPack.HtmlDocument document, string set)
         {
             var setsRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_otherSetsValue");
