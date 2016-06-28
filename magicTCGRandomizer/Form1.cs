@@ -100,6 +100,18 @@ namespace magicTCGRandomizer
                 else
                     return comboBoxRarity.Text;
             }
+            else if (location == "keyword")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return textBoxKeyword.Text;
+                    });
+                }
+                else
+                    return textBoxKeyword.Text;
+            }
             return "error";
         }
 
@@ -113,7 +125,6 @@ namespace magicTCGRandomizer
             {
                 //loop and wait for thread to finish
             }*/ 
-            
         }
 
         public void cardSearch()
@@ -261,7 +272,7 @@ namespace magicTCGRandomizer
                     pictureBoxCard.Load(totalImgURL);
                     updateTextBox("Single result found!\r\n");
                 }
-                else
+                else //found multiple results or no results
                 {
                     var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
                     //is not null even with no results
@@ -270,11 +281,64 @@ namespace magicTCGRandomizer
                     //table containing the tables (each table is a card)
                     //div , table , tr, td
                     //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
-                    //need to account for it finding one result and taking you directly to the page
 
                     updateTextBox("Found multiple results.\r\n");
-                    //temp
-                    updateTextBox("Thread end\r\n");
+                    List<String> compiledCardList = new List<String>();
+
+                    for(int i = 0; i < cardsTable.ChildNodes.Count; i++)
+                    {
+                        if(cardsTable.ChildNodes[i].Name != "#text") 
+                        {
+                            var possibleCard = cardsTable.ChildNodes[i]; //get the entire row describing the card
+                            var possibleCardDetails = possibleCard.ChildNodes[1].ChildNodes[3];  //get just the description
+                            var possibleCardImage = possibleCard.ChildNodes[1].ChildNodes[1]; //get just the card art
+                            var cardInfo = possibleCardDetails.InnerText.ToString().Trim(); //trim description
+                            cardInfo = Regex.Replace(cardInfo, @"\t|\n|\r", " "); //remove newlines, tabs, and carriage returns
+                            List<String> words = new List<String>();
+
+                            var tempWords = cardInfo.Split();
+                            foreach (string word in tempWords)
+                            {
+                                if (word != " " && word != "")
+                                {
+                                    words.Add(word);
+                                }
+                            }
+
+                            if(checkBoxCMCRandom.Checked == false) //if CMC is not random
+                            {
+
+                            }
+
+                            if(!(getTextFromForm("rarity").Equals("Random"))) //if rarity is not random
+                            {
+
+                            }
+
+                            if(!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
+                            {
+
+                            }
+                            //document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl00_listRepeater_ctl00_cardTitle");
+                            string temp = "";
+                            string imgStringMatch = Regex.Match(possibleCardImage.InnerHtml, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
+                            imgStringMatch = imgStringMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
+                            string totalImgURL = "http://gatherer.wizards.com" + imgStringMatch + "type=card"; //create full URL
+                            compiledCardList.Add(totalImgURL);
+                            //pictureBoxCard.Load(totalImgURL);
+                            //return;
+                            
+                        }
+                    }
+
+                    Random rnd = new Random();
+                    int j = rnd.Next(0, compiledCardList.Count);
+
+                    string finalCardURL = compiledCardList.ElementAt(j);
+
+                    pictureBoxCard.Load(finalCardURL);
+
+                    updateTextBox("Thread end\r\n"); //temp
                     //cardFound = true;
 
                     //check if there are multiple pages to look through
@@ -294,6 +358,7 @@ namespace magicTCGRandomizer
             catch (Exception exp)
             {
                 updateTextBox("Something went wrong.\r\n");
+                updateTextBox(exp + "\r\n");
                 updateTextBox("Thread end\r\n");
             }
         }
@@ -317,7 +382,58 @@ namespace magicTCGRandomizer
             else
                 return false;
         }
-        /*
+
+        public bool checkRarity(HtmlAgilityPack.HtmlDocument document, string rarity)
+        {
+            var rarityRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rarityRow");
+            if (rarityRow != null)
+            {
+                if (Regex.IsMatch(rarityRow.InnerText.ToString(), rarity))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                //Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
+                return false;
+            }
+        }
+
+        private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+            {
+                for (int i = 0; i < ColorListCheckBox.Items.Count; i++)
+                {
+                    ColorListCheckBox.SetItemChecked(i, false);
+                }
+            }
+        }
+
+        private void ColorListCheckBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (checkBoxColorRandom.Checked == true)
+                checkBoxColorRandom.Checked = false;
+        }
+
+        private void checkBoxCMCRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+            {
+                if (numericUpDownCMC.Value != 0)
+                    numericUpDownCMC.Value = 0;
+                checkBoxCMCRandom.Checked = true;
+            }
+        }
+
+        private void numericUpDownCMC_ValueChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCMCRandom.Checked == true)
+                checkBoxCMCRandom.Checked = false;
+        }
+
+                /*
         public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
         {
             var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
@@ -390,22 +506,6 @@ namespace magicTCGRandomizer
             }
         }
         */
-        public bool checkRarity(HtmlAgilityPack.HtmlDocument document, string rarity)
-        {
-            var rarityRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rarityRow");
-            if(rarityRow != null)
-            {
-                if (Regex.IsMatch(rarityRow.InnerText.ToString(), rarity))
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
-                return false;
-            }
-        }
         /*
         public bool checkSets(HtmlAgilityPack.HtmlDocument document, string set)
         {
@@ -423,38 +523,5 @@ namespace magicTCGRandomizer
                 return false;
             }
         } */
-
-        private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxColorRandom.Checked == true)
-            {
-                for (int i = 0; i < ColorListCheckBox.Items.Count; i++)
-                {
-                    ColorListCheckBox.SetItemChecked(i, false);
-                }
-            }
-        }
-
-        private void ColorListCheckBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (checkBoxColorRandom.Checked == true)
-                checkBoxColorRandom.Checked = false;
-        }
-
-        private void checkBoxCMCRandom_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxCMCRandom.Checked == true)
-            {
-                if (numericUpDownCMC.Value != 0)
-                    numericUpDownCMC.Value = 0;
-                checkBoxCMCRandom.Checked = true;
-            }
-        }
-
-        private void numericUpDownCMC_ValueChanged(object sender, EventArgs e)
-        {
-            if (checkBoxCMCRandom.Checked == true)
-                checkBoxCMCRandom.Checked = false;
-        }
     }
 }
