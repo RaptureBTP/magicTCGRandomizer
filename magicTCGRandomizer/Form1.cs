@@ -23,7 +23,7 @@ namespace magicTCGRandomizer
             InitializeComponent();
         }
 
-        bool cardFound = false;
+        //bool cardFound = false;
 
         public void updateTextBox(string msg)
         {
@@ -35,7 +35,6 @@ namespace magicTCGRandomizer
             {
                 textBoxOutput.AppendText(msg);
             }
-            //textBoxOutput.Text += msg;
         }
 
         public string getTextFromForm(string location)
@@ -111,6 +110,18 @@ namespace magicTCGRandomizer
                 }
                 else
                     return textBoxKeyword.Text.ToLower();
+            }
+            else if (location == "cmc")
+            {
+                if (InvokeRequired)
+                {
+                    return (string)Invoke((Func<string>)delegate
+                    {
+                        return numericUpDownCMC.Value.ToString();
+                    });
+                }
+                else
+                    return numericUpDownCMC.Value.ToString();
             }
             return "error";
         }
@@ -230,7 +241,7 @@ namespace magicTCGRandomizer
                     updateTextBox("Subtype added to URL\r\n");
                 }
 
-                var document = getHtmlWeb.Load(searchURL);
+                var document = getHtmlWeb.Load(searchURL); //search with completed URL
 
                 if (document != null)
                     updateTextBox("Web page found\r\n");
@@ -258,14 +269,11 @@ namespace magicTCGRandomizer
                             return;
                         }
                     }
+                    //TODO: check for keyword
 
-                    //check for keyword
-
-                    //display card, and card name?
+                    //display card
                     var cardImgNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage");
-                    //var cardImgNode = cardNode.ChildNodes[1];
-                    string picHTML = cardImgNode.OuterHtml;
-                    string imgMatch = Regex.Match(picHTML, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
+                    string imgMatch = Regex.Match(cardImgNode.OuterHtml, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
                     imgMatch = imgMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
                     string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
                     
@@ -275,7 +283,6 @@ namespace magicTCGRandomizer
                 else //found multiple results or no results
                 {
                     var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
-                    //is not null even with no results
 
                     var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];
                     //table containing the tables (each table is a card)
@@ -283,9 +290,11 @@ namespace magicTCGRandomizer
                     //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
 
                     updateTextBox("Found multiple results.\r\n");
-                    List<String> compiledCardList = new List<String>();
 
-                    for(int i = 0; i < cardsTable.ChildNodes.Count; i++)
+                    List<String> compiledCardList = new List<String>();
+                    bool matched = false;
+
+                    for (int i = 0; i < cardsTable.ChildNodes.Count; i++)
                     {
                         if(cardsTable.ChildNodes[i].Name != "#text") 
                         {
@@ -293,21 +302,33 @@ namespace magicTCGRandomizer
                             var possibleCardDetails = possibleCard.ChildNodes[1].ChildNodes[3];  //get just the description
                             var possibleCardImage = possibleCard.ChildNodes[1].ChildNodes[1]; //get just the card art
                             var cardInfo = possibleCardDetails.InnerText.ToString().Trim(); //trim description
-                            cardInfo = Regex.Replace(cardInfo, @"\t|\n|\r", " "); //remove newlines, tabs, and carriage returns
                             List<String> words = new List<String>();
+                            cardInfo = Regex.Replace(cardInfo, @"\t|\n|\r", " "); //remove newlines, tabs, and carriage returns
 
                             var tempWords = cardInfo.Split();
-                            foreach (string word in tempWords)
+                            foreach (string word in tempWords) //?
                             {
                                 if (word != " " && word != "")
-                                {
                                     words.Add(word);
-                                }
                             }
 
                             if(checkBoxCMCRandom.Checked == false) //if CMC is not random
                             {
+                                foreach(string theWord in words)
+                                {
+                                    if (theWord.Contains("("))
+                                    {
+                                        string cmc = Regex.Replace(theWord, "([()])", "").ToString();
+                                        if (getTextFromForm("cmc").Equals(cmc))
+                                            matched = true;
+                                        break;
+                                    }
+                                }
 
+                                if (matched == false)
+                                    continue;
+
+                                matched = false;
                             }
 
                             if(!(getTextFromForm("rarity").Equals("Random"))) //if rarity is not random
@@ -330,7 +351,6 @@ namespace magicTCGRandomizer
 
                     Random rnd = new Random();
                     int j = rnd.Next(0, compiledCardList.Count);
-
                     string finalCardURL = compiledCardList.ElementAt(j);
 
                     pictureBoxCard.Load(finalCardURL);
@@ -365,15 +385,9 @@ namespace magicTCGRandomizer
             string result = "";
             var CMCNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cmcRow"); //find the CMC element via ID
             if (CMCNode != null)
-            {
-                string temp = CMCNode.InnerText;
-                result = Regex.Match(temp, "\\d").ToString(); //regex match to find only the digit //check to make sure double digits work correctly
-            }
+                result = Regex.Match(CMCNode.InnerText, "\\d").ToString(); //regex match to find only the digit //check to make sure double digits work correctly
             else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct CMC id on the page.");
                 return false;
-            }
             if(result.Equals(cmc))
                 return true;
             else
@@ -391,10 +405,7 @@ namespace magicTCGRandomizer
                     return false;
             }
             else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct card rarity element on the page.");
                 return false;
-            }
         }
 
         private void checkBoxColorRandom_CheckedChanged(object sender, EventArgs e)
@@ -402,9 +413,7 @@ namespace magicTCGRandomizer
             if (checkBoxColorRandom.Checked == true)
             {
                 for (int i = 0; i < ColorListCheckBox.Items.Count; i++)
-                {
                     ColorListCheckBox.SetItemChecked(i, false);
-                }
             }
         }
 
