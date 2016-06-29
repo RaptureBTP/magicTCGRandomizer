@@ -312,7 +312,8 @@ namespace magicTCGRandomizer
 
                             if(!(getTextFromForm("rarity").Equals("Random"))) //if rarity is not random
                             {
-
+                                if (!(possibleCard.ChildNodes[1].ChildNodes[5].InnerHtml.Contains(getTextFromForm("rarity")))) //get portion of table that contains rarity info, then check if it contains the specified rarity term
+                                    continue; //if it doesn't, continue
                             }
 
                             if(!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
