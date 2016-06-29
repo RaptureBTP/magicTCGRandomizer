@@ -106,11 +106,11 @@ namespace magicTCGRandomizer
                 {
                     return (string)Invoke((Func<string>)delegate
                     {
-                        return textBoxKeyword.Text;
+                        return textBoxKeyword.Text.ToLower();
                     });
                 }
                 else
-                    return textBoxKeyword.Text;
+                    return textBoxKeyword.Text.ToLower();
             }
             return "error";
         }
@@ -317,17 +317,13 @@ namespace magicTCGRandomizer
 
                             if(!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
                             {
-
+                                if (!(cardInfo.Contains(getTextFromForm("keyword"))))
+                                    continue;
                             }
-                            //document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl00_listRepeater_ctl00_cardTitle");
-                            string temp = "";
                             string imgStringMatch = Regex.Match(possibleCardImage.InnerHtml, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
                             imgStringMatch = imgStringMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
                             string totalImgURL = "http://gatherer.wizards.com" + imgStringMatch + "type=card"; //create full URL
-                            compiledCardList.Add(totalImgURL);
-                            //pictureBoxCard.Load(totalImgURL);
-                            //return;
-                            
+                            compiledCardList.Add(totalImgURL);                          
                         }
                     }
 

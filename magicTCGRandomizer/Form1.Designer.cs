@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.LblRIG = new System.Windows.Forms.Label();
             this.LblRCG = new System.Windows.Forms.Label();
             this.ColorListCheckBox = new System.Windows.Forms.CheckedListBox();
             this.LblColor = new System.Windows.Forms.Label();
@@ -60,16 +59,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
-            // 
-            // LblRIG
-            // 
-            this.LblRIG.AutoSize = true;
-            this.LblRIG.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblRIG.Location = new System.Drawing.Point(12, 362);
-            this.LblRIG.Name = "LblRIG";
-            this.LblRIG.Size = new System.Drawing.Size(208, 20);
-            this.LblRIG.TabIndex = 0;
-            this.LblRIG.Text = "Random Idea Generator";
             // 
             // LblRCG
             // 
@@ -292,7 +281,7 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(12, 310);
+            this.buttonSearch.Location = new System.Drawing.Point(88, 349);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
             this.buttonSearch.TabIndex = 16;
@@ -430,7 +419,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(994, 681);
+            this.ClientSize = new System.Drawing.Size(994, 419);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.textBoxKeyword);
@@ -459,7 +448,6 @@
             this.Controls.Add(this.LblColor);
             this.Controls.Add(this.ColorListCheckBox);
             this.Controls.Add(this.LblRCG);
-            this.Controls.Add(this.LblRIG);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).EndInit();
@@ -470,8 +458,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label LblRIG;
         private System.Windows.Forms.Label LblRCG;
         private System.Windows.Forms.CheckedListBox ColorListCheckBox;
         private System.Windows.Forms.Label LblColor;
