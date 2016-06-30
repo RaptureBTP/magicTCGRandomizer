@@ -337,6 +337,7 @@
             // 
             // pictureBoxCard
             // 
+            this.pictureBoxCard.BackColor = System.Drawing.SystemColors.ControlLight;
             this.pictureBoxCard.Location = new System.Drawing.Point(616, 23);
             this.pictureBoxCard.MaximumSize = new System.Drawing.Size(400, 400);
             this.pictureBoxCard.MinimumSize = new System.Drawing.Size(223, 310);

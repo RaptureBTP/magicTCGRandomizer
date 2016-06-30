@@ -144,10 +144,13 @@ namespace magicTCGRandomizer
             {
                 updateTextBox("Thread Start\r\n");
 
+                
+
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
 
                 string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
-                string searchURL = baseURL;
+                //string searchURL = baseURL;
+                string searchURL = "";
                 bool prefixed = false;
 
                 //name
@@ -156,7 +159,7 @@ namespace magicTCGRandomizer
                     //split on word in textbox
                     string[] nameWords = textBoxName.Text.Split();
 
-                    searchURL += "name=";
+                    searchURL = "name="; //+=
 
                     foreach (string name in nameWords)
                     {
@@ -240,8 +243,8 @@ namespace magicTCGRandomizer
                     searchURL += "subtype=+[" + subtype + "]";
                     updateTextBox("Subtype added to URL\r\n");
                 }
-
-                var document = getHtmlWeb.Load(searchURL); //search with completed URL
+                string combinedURL = baseURL + searchURL;
+                var document = getHtmlWeb.Load(combinedURL); //search with completed URL
 
                 if (document != null)
                     updateTextBox("Web page found\r\n");
@@ -282,70 +285,107 @@ namespace magicTCGRandomizer
                 }
                 else //found multiple results or no results
                 {
-                    var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
-
-                    var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];
-                    //table containing the tables (each table is a card)
-                    //div , table , tr, td
-                    //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
-
-                    updateTextBox("Found multiple results.\r\n");
-
                     List<String> compiledCardList = new List<String>();
-                    bool matched = false;
+                    updateTextBox("Found multiple results.\r\n");
+                    bool loop = true;
+                    int pageNum = 1;
+                    int maxPageNum = 1;
+                    bool foundEverything = false;
+                    bool foundTotalPages = false;
 
-                    for (int i = 0; i < cardsTable.ChildNodes.Count; i++)
+                    var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+
+                    if (foundTotalPages == false && pageControlContainer != null)
                     {
-                        if(cardsTable.ChildNodes[i].Name != "#text") 
+                        foundTotalPages = true;
+                        string lastPageLink = pageControlContainer.ChildNodes[1].ChildNodes[7].OuterHtml.ToString();
+                        string maxPageNumString = Regex.Match(lastPageLink, "(page=\\d)").ToString();
+                        maxPageNum = Int32.Parse(Regex.Match(maxPageNumString, "\\d").ToString());
+                    }
+
+                    while (loop)
+                    {
+                        var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
+
+                        var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];
+                        //table containing the tables (each table is a card)
+                        //div , table , tr, td
+                        //children count is (actual number of results  * 2) + 1  [+1 appears to be an additional text element at the bottom? need to test]
+
+                        bool matched = false;
+
+                        for (int i = 0; i < cardsTable.ChildNodes.Count; i++)
                         {
-                            var possibleCard = cardsTable.ChildNodes[i]; //get the entire row describing the card
-                            var possibleCardDetails = possibleCard.ChildNodes[1].ChildNodes[3];  //get just the description
-                            var possibleCardImage = possibleCard.ChildNodes[1].ChildNodes[1]; //get just the card art
-                            var cardInfo = possibleCardDetails.InnerText.ToString().Trim(); //trim description
-                            List<String> words = new List<String>();
-                            cardInfo = Regex.Replace(cardInfo, @"\t|\n|\r", " "); //remove newlines, tabs, and carriage returns
-
-                            var tempWords = cardInfo.Split();
-                            foreach (string word in tempWords) //?
+                            if (cardsTable.ChildNodes[i].Name != "#text")
                             {
-                                if (word != " " && word != "")
-                                    words.Add(word);
-                            }
+                                var possibleCard = cardsTable.ChildNodes[i]; //get the entire row describing the card
+                                var possibleCardDetails = possibleCard.ChildNodes[1].ChildNodes[3];  //get just the description
+                                var possibleCardImage = possibleCard.ChildNodes[1].ChildNodes[1]; //get just the card art
+                                var cardInfo = possibleCardDetails.InnerText.ToString().Trim(); //trim description
+                                List<String> words = new List<String>();
+                                cardInfo = Regex.Replace(cardInfo, @"\t|\n|\r", " "); //remove newlines, tabs, and carriage returns
 
-                            if(checkBoxCMCRandom.Checked == false) //if CMC is not random
-                            {
-                                foreach(string theWord in words)
+                                var tempWords = cardInfo.Split();
+                                foreach (string word in tempWords) //?
                                 {
-                                    if (theWord.Contains("("))
-                                    {
-                                        string cmc = Regex.Replace(theWord, "([()])", "").ToString();
-                                        if (getTextFromForm("cmc").Equals(cmc))
-                                            matched = true;
-                                        break;
-                                    }
+                                    if (word != " " && word != "")
+                                        words.Add(word);
                                 }
 
-                                if (matched == false)
-                                    continue;
+                                if (checkBoxCMCRandom.Checked == false) //if CMC is not random
+                                {
+                                    foreach (string theWord in words)
+                                    {
+                                        if (theWord.Contains("("))
+                                        {
+                                            string cmc = Regex.Replace(theWord, "([()])", "").ToString();
+                                            if (getTextFromForm("cmc").Equals(cmc))
+                                                matched = true;
+                                            break;
+                                        }
+                                    }
 
-                                matched = false;
-                            }
+                                    if (matched == false)
+                                        continue;
 
-                            if(!(getTextFromForm("rarity").Equals("Random"))) //if rarity is not random
-                            {
-                                if (!(possibleCard.ChildNodes[1].ChildNodes[5].InnerHtml.Contains(getTextFromForm("rarity")))) //get portion of table that contains rarity info, then check if it contains the specified rarity term
-                                    continue; //if it doesn't, continue
-                            }
+                                    matched = false;
+                                }
 
-                            if(!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
-                            {
-                                if (!(cardInfo.Contains(getTextFromForm("keyword"))))
-                                    continue;
+                                if (!(getTextFromForm("rarity").Equals("Random"))) //if rarity is not random
+                                {
+                                    if (!(possibleCard.ChildNodes[1].ChildNodes[5].InnerHtml.Contains(getTextFromForm("rarity")))) //get portion of table that contains rarity info, then check if it contains the specified rarity term
+                                        continue; //if it doesn't, continue
+                                }
+
+                                if (!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
+                                {
+                                    if (!(cardInfo.Contains(getTextFromForm("keyword"))))
+                                        continue;
+                                }
+                                string imgStringMatch = Regex.Match(possibleCardImage.InnerHtml, "img src=\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
+                                imgStringMatch = imgStringMatch.Substring(14); //cut off the useless chars - can maybe incorporate this into above line
+                                string totalImgURL = "http://gatherer.wizards.com" + imgStringMatch + "type=card"; //create full URL
+                                if (!(compiledCardList.Contains(totalImgURL)))
+                                    compiledCardList.Add(totalImgURL);
+                                else if(pageNum > maxPageNum + 1)
+                                {
+                                    foundEverything = true;
+                                    break;
+                                }
                             }
-                            string imgStringMatch = Regex.Match(possibleCardImage.InnerHtml, "\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
-                            imgStringMatch = imgStringMatch.Substring(6); //cut off the useless chars - can maybe incorporate this into above line
-                            string totalImgURL = "http://gatherer.wizards.com" + imgStringMatch + "type=card"; //create full URL
-                            compiledCardList.Add(totalImgURL);                          
+                        }
+                        //check if there are multiple pages to look through
+                        //var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
+                        if (pageControlContainer != null && foundEverything == false)
+                        {
+                            document = getHtmlWeb.Load(baseURL + "page=" + pageNum.ToString() + "&" + searchURL); //load next page
+                            pageNum++;
+                            updateTextBox("Please wait...\r\n");
+                        }
+                        else
+                        {
+                            foundEverything = false;
+                            break;
                         }
                     }
 
@@ -357,13 +397,6 @@ namespace magicTCGRandomizer
 
                     updateTextBox("Thread end\r\n"); //temp
                     //cardFound = true;
-
-                    //check if there are multiple pages to look through
-                    /*var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
-                    if (pageControlContainer != null)
-                    {
-
-                    }*/
                 }
 
             }
