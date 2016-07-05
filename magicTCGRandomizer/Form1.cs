@@ -24,6 +24,7 @@ namespace magicTCGRandomizer
         }
 
         //bool cardFound = false;
+        List<String> lastResults = new List<String>();
 
         public void updateTextBox(string msg)
         {
@@ -128,10 +129,14 @@ namespace magicTCGRandomizer
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-
+            buttonSearch.Enabled = false;
+            buttonNext.Enabled = false;
             Thread searchThread = new Thread(cardSearch);
             searchThread.Start();
 
+            buttonSearch.Enabled = true;
+            buttonNext.Enabled = true;
+            buttonRotate.Enabled = true;
             /*while(cardFound == false)
             {
                 //loop and wait for thread to finish
@@ -272,6 +277,16 @@ namespace magicTCGRandomizer
                             return;
                         }
                     }
+                    if(!(getTextFromForm("keyword").Equals(""))) //if user entered a keyword
+                    {
+                        var textDetails = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_textRow");
+                        if(!(textDetails.InnerText.ToUpper().Contains(getTextFromForm("keyword").ToUpper())))
+                        {
+                            updateTextBox("No match found.\r\n");
+                            return;
+                        }
+                        //if(textDetails.)
+                    }
                     //TODO: check for keyword
 
                     //display card
@@ -388,13 +403,14 @@ namespace magicTCGRandomizer
                             break;
                         }
                     }
-
-                    Random rnd = new Random();
+                    lastResults = compiledCardList;
+                    /*(Random rnd = new Random();
                     int j = rnd.Next(0, compiledCardList.Count);
                     string finalCardURL = compiledCardList.ElementAt(j);
 
-                    pictureBoxCard.Load(finalCardURL);
-
+                    pictureBoxCard.Load(finalCardURL);*/
+                    updatePictureBox();
+                    //buttonEnable();
                     updateTextBox("Thread end\r\n"); //temp
                     //cardFound = true;
                 }
@@ -411,6 +427,19 @@ namespace magicTCGRandomizer
                 updateTextBox(exp + "\r\n");
                 updateTextBox("Thread end\r\n");
             }
+        }
+
+        private void buttonNext_Click(object sender, EventArgs e)
+        {
+            pictureBoxCard.Size = new Size(223,310);
+            updatePictureBox();
+        }
+
+        private void updatePictureBox()
+        {
+            Random rnd = new Random();
+            int j = rnd.Next(0, lastResults.Count);
+            pictureBoxCard.Load(lastResults.ElementAt(j));
         }
 
         public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
@@ -472,79 +501,88 @@ namespace magicTCGRandomizer
                 checkBoxCMCRandom.Checked = false;
         }
 
-                /*
-        public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
+        private void buttonRotateRight_Click(object sender, EventArgs e)
         {
-            var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
-            if (manaRow != null)
-            {
-                var colorChildren = manaRow.ChildNodes;
-                var colorList = colorChildren[3].InnerHtml.ToString();
-                if(colorList.Contains(color))
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
-                return false;
-            }
+            Bitmap tempBM = new Bitmap(pictureBoxCard.Image);
+            tempBM.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            pictureBoxCard.Image = tempBM;
+            
+            pictureBoxCard.Size = pictureBoxCard.Image.Size;
         }
-        
-        public int countCMCColors(HtmlAgilityPack.HtmlDocument document, List<string> passedColors = null) //TODO: CURRENTLY DOES NOT CHECK/ACCOUNT FOR MULTIPLE OF SAME MANA SYMBOL - FIX THIS
-        {
-            var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
-            if (manaRow != null)
-            {
-                var colorChildren = manaRow.ChildNodes;
-                var colorList = colorChildren[3].InnerHtml.ToString();
-                int webColorCount = Regex.Matches(colorList, "src=").Count; //use regex to count number of mana symbol images
-                for(int j = 0; j <= 15; j++)//check for generic mana symbol
-                {
-                    string altWithDigit = "alt=\"" + j + "\"";
-                    if (colorList.Contains(altWithDigit))
-                    {
-                        webColorCount -= 1;
-                        break;
-                    }
-                }
 
-                if(passedColors != null) // if passedColors contains colors
-                {
-                    foreach (string col in passedColors)
-                    {
-                        int numSelectedColor = Regex.Matches(colorList, col).Count; //count number of occurances of each mana symbol of the same type (ex. two swamps, 3 islands)
-                        webColorCount = (webColorCount - numSelectedColor) + 1; //subtract the extras from the count, but leave one count of this color
-                    }
-                }
-                return webColorCount;
-            }
-            else
+        /*
+public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
+{
+    var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
+    if (manaRow != null)
+    {
+        var colorChildren = manaRow.ChildNodes;
+        var colorList = colorChildren[3].InnerHtml.ToString();
+        if(colorList.Contains(color))
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+        return false;
+    }
+}
+
+public int countCMCColors(HtmlAgilityPack.HtmlDocument document, List<string> passedColors = null) //TODO: CURRENTLY DOES NOT CHECK/ACCOUNT FOR MULTIPLE OF SAME MANA SYMBOL - FIX THIS
+{
+    var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
+    if (manaRow != null)
+    {
+        var colorChildren = manaRow.ChildNodes;
+        var colorList = colorChildren[3].InnerHtml.ToString();
+        int webColorCount = Regex.Matches(colorList, "src=").Count; //use regex to count number of mana symbol images
+        for(int j = 0; j <= 15; j++)//check for generic mana symbol
+        {
+            string altWithDigit = "alt=\"" + j + "\"";
+            if (colorList.Contains(altWithDigit))
             {
-                //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
-                return 0;
+                webColorCount -= 1;
+                break;
             }
         }
 
-        public bool checkType(HtmlAgilityPack.HtmlDocument document, string type)
+        if(passedColors != null) // if passedColors contains colors
         {
-            var typeRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_typeRow");
-            if(typeRow != null)
+            foreach (string col in passedColors)
             {
-                string cardTypes = typeRow.InnerText.ToString();
-                if (Regex.IsMatch(cardTypes, type) == true)
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
-                return false;
+                int numSelectedColor = Regex.Matches(colorList, col).Count; //count number of occurances of each mana symbol of the same type (ex. two swamps, 3 islands)
+                webColorCount = (webColorCount - numSelectedColor) + 1; //subtract the extras from the count, but leave one count of this color
             }
         }
-        */
+        return webColorCount;
+    }
+    else
+    {
+        //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
+        return 0;
+    }
+}
+
+public bool checkType(HtmlAgilityPack.HtmlDocument document, string type)
+{
+    var typeRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_typeRow");
+    if(typeRow != null)
+    {
+        string cardTypes = typeRow.InnerText.ToString();
+        if (Regex.IsMatch(cardTypes, type) == true)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        //Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
+        return false;
+    }
+}
+*/
         /*
         public bool checkSets(HtmlAgilityPack.HtmlDocument document, string set)
         {

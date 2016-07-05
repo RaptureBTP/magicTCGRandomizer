@@ -56,6 +56,8 @@
             this.textBoxKeyword = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.labelName = new System.Windows.Forms.Label();
+            this.buttonNext = new System.Windows.Forms.Button();
+            this.buttonRotate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
@@ -207,15 +209,33 @@
             this.comboBoxSet.FormattingEnabled = true;
             this.comboBoxSet.Items.AddRange(new object[] {
             "Random",
+            "Eldritch Moon",
+            "Eternal Masters",
             "Shadows Over Innistrad",
+            "Duel Decks: Blessed vs. Cursed",
             "Oath of the Gatewatch",
+            "Commander 2015",
+            "From the Vault: Angels",
             "Battle for Zendikar",
+            "Duel Decks: Zendikar vs. Eldrazi",
+            "Magic Origins",
+            "Modern Masters 2015 Edition",
             "Dragons of Tarkir",
+            "Duel Decks: Elspeth vs. Kiora",
             "Fate Reforged",
+            "Commander 2014",
             "Khans of Tarkir",
+            "Duel Decks: Speed vs. Cunning",
+            "From the Vault: Annihilation (2014)",
+            "Magic 2015 Core Set",
+            "Modern Event Deck 2014",
+            "Conspiracy",
             "Journey Into Nyx",
+            "Duel Decks: Jace vs. Vraska",
             "Born of the Gods",
+            "Commander 2013 Edition",
             "Theros",
+            "Duel Decks: Heroes vs. Monsters",
             "Dragon\'s Maze",
             "Gatecrash",
             "Return to Ravnica",
@@ -249,7 +269,7 @@
             "Mirrodin"});
             this.comboBoxSet.Location = new System.Drawing.Point(290, 75);
             this.comboBoxSet.Name = "comboBoxSet";
-            this.comboBoxSet.Size = new System.Drawing.Size(132, 24);
+            this.comboBoxSet.Size = new System.Drawing.Size(166, 24);
             this.comboBoxSet.TabIndex = 13;
             this.comboBoxSet.Text = "Random";
             // 
@@ -257,7 +277,7 @@
             // 
             this.LblFormat.AutoSize = true;
             this.LblFormat.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblFormat.Location = new System.Drawing.Point(430, 57);
+            this.LblFormat.Location = new System.Drawing.Point(475, 57);
             this.LblFormat.Name = "LblFormat";
             this.LblFormat.Size = new System.Drawing.Size(63, 17);
             this.LblFormat.TabIndex = 14;
@@ -273,7 +293,7 @@
             "Commander",
             "Legacy",
             "Vintage"});
-            this.comboBoxFormat.Location = new System.Drawing.Point(433, 75);
+            this.comboBoxFormat.Location = new System.Drawing.Point(478, 75);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(121, 24);
             this.comboBoxFormat.TabIndex = 15;
@@ -339,7 +359,6 @@
             // 
             this.pictureBoxCard.BackColor = System.Drawing.SystemColors.ControlLight;
             this.pictureBoxCard.Location = new System.Drawing.Point(616, 23);
-            this.pictureBoxCard.MaximumSize = new System.Drawing.Size(400, 400);
             this.pictureBoxCard.MinimumSize = new System.Drawing.Size(223, 310);
             this.pictureBoxCard.Name = "pictureBoxCard";
             this.pictureBoxCard.Size = new System.Drawing.Size(348, 376);
@@ -378,7 +397,7 @@
             // 
             this.textBoxSubtype.Location = new System.Drawing.Point(289, 128);
             this.textBoxSubtype.Name = "textBoxSubtype";
-            this.textBoxSubtype.Size = new System.Drawing.Size(133, 22);
+            this.textBoxSubtype.Size = new System.Drawing.Size(167, 22);
             this.textBoxSubtype.TabIndex = 26;
             this.textBoxSubtype.Text = "Random";
             // 
@@ -386,7 +405,7 @@
             // 
             this.LblKeyword.AutoSize = true;
             this.LblKeyword.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblKeyword.Location = new System.Drawing.Point(433, 106);
+            this.LblKeyword.Location = new System.Drawing.Point(478, 106);
             this.LblKeyword.Name = "LblKeyword";
             this.LblKeyword.Size = new System.Drawing.Size(69, 17);
             this.LblKeyword.TabIndex = 27;
@@ -394,7 +413,7 @@
             // 
             // textBoxKeyword
             // 
-            this.textBoxKeyword.Location = new System.Drawing.Point(433, 130);
+            this.textBoxKeyword.Location = new System.Drawing.Point(478, 130);
             this.textBoxKeyword.Name = "textBoxKeyword";
             this.textBoxKeyword.Size = new System.Drawing.Size(121, 22);
             this.textBoxKeyword.TabIndex = 28;
@@ -403,7 +422,7 @@
             // 
             this.textBoxName.Location = new System.Drawing.Point(292, 176);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(100, 22);
+            this.textBoxName.Size = new System.Drawing.Size(164, 22);
             this.textBoxName.TabIndex = 29;
             // 
             // labelName
@@ -416,11 +435,35 @@
             this.labelName.TabIndex = 30;
             this.labelName.Text = "Name:";
             // 
+            // buttonNext
+            // 
+            this.buttonNext.Enabled = false;
+            this.buttonNext.Location = new System.Drawing.Point(694, 406);
+            this.buttonNext.Name = "buttonNext";
+            this.buttonNext.Size = new System.Drawing.Size(75, 28);
+            this.buttonNext.TabIndex = 31;
+            this.buttonNext.Text = "Next";
+            this.buttonNext.UseVisualStyleBackColor = true;
+            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            // 
+            // buttonRotate
+            // 
+            this.buttonRotate.Enabled = false;
+            this.buttonRotate.Location = new System.Drawing.Point(825, 406);
+            this.buttonRotate.Name = "buttonRotate";
+            this.buttonRotate.Size = new System.Drawing.Size(75, 28);
+            this.buttonRotate.TabIndex = 32;
+            this.buttonRotate.Text = "Rotate";
+            this.buttonRotate.UseVisualStyleBackColor = true;
+            this.buttonRotate.Click += new System.EventHandler(this.buttonRotateRight_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(994, 419);
+            this.ClientSize = new System.Drawing.Size(1080, 446);
+            this.Controls.Add(this.buttonRotate);
+            this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.textBoxKeyword);
@@ -487,6 +530,8 @@
         private System.Windows.Forms.TextBox textBoxKeyword;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.Button buttonNext;
+        private System.Windows.Forms.Button buttonRotate;
     }
 }
 
