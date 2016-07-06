@@ -1,0 +1,16 @@
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\magicTCGRandomizer.exe.config
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\magicTCGRandomizer.exe
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\magicTCGRandomizer.pdb
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\FSharp.Core.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\HtmlAgilityPack.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\ScrapySharp.Core.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\ScrapySharpAsync.dll
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\FSharp.Core.xml
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\HtmlAgilityPack.pdb
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\bin\Release\HtmlAgilityPack.xml
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.csprojResolveAssemblyReference.cache
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.Form1.resources
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.Properties.Resources.resources
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.csproj.GenerateResource.Cache
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.exe
+C:\Users\brady\documents\visual studio 2015\Projects\magicTCGRandomizer\magicTCGRandomizer\obj\Release\magicTCGRandomizer.pdb

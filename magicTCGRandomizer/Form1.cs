@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*Author: Brady Ericksen
+Last Edit: 7/6/2016
+Version: v0.5 Alpha
+*/
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,8 +27,8 @@ namespace magicTCGRandomizer
             InitializeComponent();
         }
 
-        //bool cardFound = false;
         List<String> lastResults = new List<String>();
+        int lastResultIndex = -1;
 
         public void updateTextBox(string msg)
         {
@@ -129,6 +133,7 @@ namespace magicTCGRandomizer
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            lastResults = new List<String>();
             buttonSearch.Enabled = false;
             buttonNext.Enabled = false;
             Thread searchThread = new Thread(cardSearch);
@@ -137,24 +142,16 @@ namespace magicTCGRandomizer
             buttonSearch.Enabled = true;
             buttonNext.Enabled = true;
             buttonRotate.Enabled = true;
-            /*while(cardFound == false)
-            {
-                //loop and wait for thread to finish
-            }*/ 
         }
 
         public void cardSearch()
         {
             try
             {
-                updateTextBox("Thread Start\r\n");
-
-                
-
+                //updateTextBox("Thread Start\r\n");
                 var getHtmlWeb = new HtmlWeb(); //create new HtmlWeb object
 
                 string baseURL = "http://gatherer.wizards.com/Pages/Search/Default.aspx?";
-                //string searchURL = baseURL;
                 string searchURL = "";
                 bool prefixed = false;
 
@@ -177,32 +174,37 @@ namespace magicTCGRandomizer
                 //color
                 if (checkBoxColorRandom.Checked != true) //if RandomCMC checkbox is not checked
                 {
+                    var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
+                    if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
+                        searchURL += "&";
+                    searchURL += "color=";
+                    prefixed = true;
                     if (radioButtonAND.Checked == true)
                     {
-
-                    }
-                    else if (radioButtonOR.Checked == true)
-                    {
-
-                    }
-                    else
-                    {
-                        var checkedColors = ColorListCheckBox.CheckedItems; //obtain collection of checked items
-                        if (prefixed == true) //if there is a preceding search term in the url, add an ampersand
-                            searchURL += "&";
-                        searchURL += "color=|";
-                        prefixed = true;
-
                         if (checkedColors.Contains("White"))
-                            searchURL += "[W]";
+                            searchURL += "+[W]";
                         if (checkedColors.Contains("Blue"))
-                            searchURL += "[U]";
+                            searchURL += "+[U]";
                         if (checkedColors.Contains("Black"))
-                            searchURL += "[B]";
+                            searchURL += "+[B]";
                         if (checkedColors.Contains("Red"))
-                            searchURL += "[R]";
+                            searchURL += "+[R]";
                         if (checkedColors.Contains("Green"))
-                            searchURL += "[G]";
+                            searchURL += "+[G]";
+                        updateTextBox("Colors added to URL\r\n");
+                    }
+                    else if(radioButtonANY.Checked == true)
+                    {
+                        if (checkedColors.Contains("White"))
+                            searchURL += "|[W]";
+                        if (checkedColors.Contains("Blue"))
+                            searchURL += "|[U]";
+                        if (checkedColors.Contains("Black"))
+                            searchURL += "|[B]";
+                        if (checkedColors.Contains("Red"))
+                            searchURL += "|[R]";
+                        if (checkedColors.Contains("Green"))
+                            searchURL += "|[G]";
                         updateTextBox("Colors added to URL\r\n");
                     }
                 }
@@ -215,6 +217,7 @@ namespace magicTCGRandomizer
                         searchURL += "&";
                     searchURL += "format=[\"" + format + "\"]";
                     prefixed = true;
+                    updateTextBox("Format added to URL\r\n");
                 }
 
                 //set
@@ -248,13 +251,14 @@ namespace magicTCGRandomizer
                     searchURL += "subtype=+[" + subtype + "]";
                     updateTextBox("Subtype added to URL\r\n");
                 }
+
                 string combinedURL = baseURL + searchURL;
                 var document = getHtmlWeb.Load(combinedURL); //search with completed URL
 
                 if (document != null)
                     updateTextBox("Web page found\r\n");
                 else
-                    updateTextBox("Web page not found\r\n");
+                    updateTextBox("Web page not found and something went very wrong.\r\n");
 
                 prefixed = false;
 
@@ -285,9 +289,7 @@ namespace magicTCGRandomizer
                             updateTextBox("No match found.\r\n");
                             return;
                         }
-                        //if(textDetails.)
                     }
-                    //TODO: check for keyword
 
                     //display card
                     var cardImgNode = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage");
@@ -296,7 +298,6 @@ namespace magicTCGRandomizer
                     string totalImgURL = "http://gatherer.wizards.com" + imgMatch + "type=card"; //create full URL
                     
                     pictureBoxCard.Load(totalImgURL);
-                    updateTextBox("Single result found!\r\n");
                 }
                 else //found multiple results or no results
                 {
@@ -310,10 +311,11 @@ namespace magicTCGRandomizer
 
                     var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
 
-                    if (foundTotalPages == false && pageControlContainer != null)
+                    if (foundTotalPages == false && pageControlContainer != null) //multiple pages of results
                     {
                         foundTotalPages = true;
-                        string lastPageLink = pageControlContainer.ChildNodes[1].ChildNodes[7].OuterHtml.ToString();
+                        int lastPageIndex = pageControlContainer.ChildNodes[1].ChildNodes.Count;
+                        string lastPageLink = pageControlContainer.ChildNodes[1].ChildNodes[lastPageIndex - 1].OuterHtml.ToString();
                         string maxPageNumString = Regex.Match(lastPageLink, "(page=\\d)").ToString();
                         maxPageNum = Int32.Parse(Regex.Match(maxPageNumString, "\\d").ToString());
                     }
@@ -390,7 +392,6 @@ namespace magicTCGRandomizer
                             }
                         }
                         //check if there are multiple pages to look through
-                        //var pageControlContainer = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_bottomPagingControlsContainer");
                         if (pageControlContainer != null && foundEverything == false)
                         {
                             document = getHtmlWeb.Load(baseURL + "page=" + pageNum.ToString() + "&" + searchURL); //load next page
@@ -404,15 +405,7 @@ namespace magicTCGRandomizer
                         }
                     }
                     lastResults = compiledCardList;
-                    /*(Random rnd = new Random();
-                    int j = rnd.Next(0, compiledCardList.Count);
-                    string finalCardURL = compiledCardList.ElementAt(j);
-
-                    pictureBoxCard.Load(finalCardURL);*/
                     updatePictureBox();
-                    //buttonEnable();
-                    updateTextBox("Thread end\r\n"); //temp
-                    //cardFound = true;
                 }
 
             }
@@ -425,7 +418,6 @@ namespace magicTCGRandomizer
             {
                 updateTextBox("Something went wrong.\r\n");
                 updateTextBox(exp + "\r\n");
-                updateTextBox("Thread end\r\n");
             }
         }
 
@@ -439,7 +431,18 @@ namespace magicTCGRandomizer
         {
             Random rnd = new Random();
             int j = rnd.Next(0, lastResults.Count);
-            pictureBoxCard.Load(lastResults.ElementAt(j));
+            if (j != lastResultIndex && lastResults.Count != 0)
+                pictureBoxCard.Load(lastResults.ElementAt(j));
+            lastResultIndex = j;
+        }
+
+        private void buttonRotateRight_Click(object sender, EventArgs e)
+        {
+            Bitmap tempBM = new Bitmap(pictureBoxCard.Image);
+            tempBM.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            pictureBoxCard.Image = tempBM;
+
+            pictureBoxCard.Size = pictureBoxCard.Image.Size;
         }
 
         public bool checkCMC(HtmlAgilityPack.HtmlDocument document, string cmc)
@@ -500,105 +503,5 @@ namespace magicTCGRandomizer
             if (checkBoxCMCRandom.Checked == true)
                 checkBoxCMCRandom.Checked = false;
         }
-
-        private void buttonRotateRight_Click(object sender, EventArgs e)
-        {
-            Bitmap tempBM = new Bitmap(pictureBoxCard.Image);
-            tempBM.RotateFlip(RotateFlipType.Rotate90FlipNone);
-            pictureBoxCard.Image = tempBM;
-            
-            pictureBoxCard.Size = pictureBoxCard.Image.Size;
-        }
-
-        /*
-public bool checkMana(HtmlAgilityPack.HtmlDocument document, string color)
-{
-    var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
-    if (manaRow != null)
-    {
-        var colorChildren = manaRow.ChildNodes;
-        var colorList = colorChildren[3].InnerHtml.ToString();
-        if(colorList.Contains(color))
-            return true;
-        else
-            return false;
-    }
-    else
-    {
-        //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
-        return false;
-    }
-}
-
-public int countCMCColors(HtmlAgilityPack.HtmlDocument document, List<string> passedColors = null) //TODO: CURRENTLY DOES NOT CHECK/ACCOUNT FOR MULTIPLE OF SAME MANA SYMBOL - FIX THIS
-{
-    var manaRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_manaRow");
-    if (manaRow != null)
-    {
-        var colorChildren = manaRow.ChildNodes;
-        var colorList = colorChildren[3].InnerHtml.ToString();
-        int webColorCount = Regex.Matches(colorList, "src=").Count; //use regex to count number of mana symbol images
-        for(int j = 0; j <= 15; j++)//check for generic mana symbol
-        {
-            string altWithDigit = "alt=\"" + j + "\"";
-            if (colorList.Contains(altWithDigit))
-            {
-                webColorCount -= 1;
-                break;
-            }
-        }
-
-        if(passedColors != null) // if passedColors contains colors
-        {
-            foreach (string col in passedColors)
-            {
-                int numSelectedColor = Regex.Matches(colorList, col).Count; //count number of occurances of each mana symbol of the same type (ex. two swamps, 3 islands)
-                webColorCount = (webColorCount - numSelectedColor) + 1; //subtract the extras from the count, but leave one count of this color
-            }
-        }
-        return webColorCount;
-    }
-    else
-    {
-        //Console.WriteLine("Something went wrong. We didn't find the correct mana symbol id on the page.");
-        return 0;
-    }
-}
-
-public bool checkType(HtmlAgilityPack.HtmlDocument document, string type)
-{
-    var typeRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_typeRow");
-    if(typeRow != null)
-    {
-        string cardTypes = typeRow.InnerText.ToString();
-        if (Regex.IsMatch(cardTypes, type) == true)
-            return true;
-        else
-            return false;
-    }
-    else
-    {
-        //Console.WriteLine("Something went wrong. We didn't find the correct card type element on the page.");
-        return false;
-    }
-}
-*/
-        /*
-        public bool checkSets(HtmlAgilityPack.HtmlDocument document, string set)
-        {
-            var setsRow = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_otherSetsValue");
-            if(setsRow != null)
-            {
-                if (Regex.IsMatch(setsRow.InnerHtml, set))
-                    return true;
-                else
-                    return false;
-            }
-            else
-            {
-                //Console.WriteLine("Something went wrong. We didn't find the correct card sets element on the page.");
-                return false;
-            }
-        } */
     }
 }

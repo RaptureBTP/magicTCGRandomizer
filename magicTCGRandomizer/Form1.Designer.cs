@@ -45,7 +45,6 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.checkBoxColorRandom = new System.Windows.Forms.CheckBox();
             this.radioButtonAND = new System.Windows.Forms.RadioButton();
-            this.radioButtonOR = new System.Windows.Forms.RadioButton();
             this.radioButtonANY = new System.Windows.Forms.RadioButton();
             this.pictureBoxCard = new System.Windows.Forms.PictureBox();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
@@ -153,7 +152,6 @@
             this.comboBoxCardType.Items.AddRange(new object[] {
             "Random",
             "Artifact",
-            "Conspiracy",
             "Creature",
             "Enchantment",
             "Instant",
@@ -229,44 +227,126 @@
             "From the Vault: Annihilation (2014)",
             "Magic 2015 Core Set",
             "Modern Event Deck 2014",
-            "Conspiracy",
+            "Magic: The Gathering—Conspiracy",
             "Journey Into Nyx",
             "Duel Decks: Jace vs. Vraska",
             "Born of the Gods",
             "Commander 2013 Edition",
             "Theros",
             "Duel Decks: Heroes vs. Monsters",
+            "From the Vault: Twenty",
+            "Magic 2014 Core Set",
+            "Modern Masters",
             "Dragon\'s Maze",
+            "Duel Decks: Sorin vs. Tibalt",
             "Gatecrash",
+            "Commander\'s Arsenal",
             "Return to Ravnica",
+            "Duel Decks: Izzet vs. Golgari",
+            "From the Vault: Realms",
+            "Magic 2013",
+            "Planechase 2012 Edition",
             "Avacyn Restored",
+            "Duel Decks: Venser vs. Koth",
             "Dark Ascension",
+            "Premium Deck Series: Graveborn",
             "Innistrad",
+            "Duel Decks: Ajani vs. Nicol Bolas",
+            "Magic 2012",
+            "From the Vault: Legends",
+            "Magic: The Gathering-Commander",
             "New Phyrexia",
+            "Duel Decks: Knights vs. Dragons",
             "Mirrodin Besieged",
             "Scars of Mirrodin",
+            "Premium Deck Series: Fire and Lightning",
+            "Duel Decks: Elspeth vs. Tezzeret",
+            "From the Vault: Relics",
+            "Magic 2011",
+            "Archenemy",
             "Rise of the Eldrazi",
+            "Duel Decks: Phyrexia vs. the Coalition",
             "Worldwake",
+            "Premium Deck Series: Slivers",
+            "Duel Decks: Garruk vs. Liliana",
             "Zendikar",
+            "Planechase",
+            "From the Vault: Exiled",
+            "Magic 2010",
             "Alara Reborn",
+            "Duel Decks: Divine vs. Demonic",
             "Conflux",
+            "Duel Decks: Jace vs. Chandra",
             "Shards of Alara",
+            "From the Vault: Dragons",
             "Eventide",
             "Shadowmoor",
             "Morningtide",
+            "Duel Decks: Elves vs. Goblins",
             "Lorwyn",
+            "Tenth Edition",
             "Future Sight",
             "Planar Chaos",
             "Time Spiral",
+            "Coldsnap",
             "Dissension",
             "Guildpact",
             "Ravnica: City of Guilds",
+            "Ninth Edition",
             "Saviors of Kamigawa",
             "Betrayers of Kamigawa",
             "Champions of Kamigawa",
+            "Unhinged",
             "Fifth Dawn",
             "Darksteel",
-            "Mirrodin"});
+            "Mirrodin",
+            "Eighth Edition",
+            "Scourge",
+            "Legions",
+            "Onslaught",
+            "Judgment",
+            "Torment",
+            "Odyssey",
+            "Apocalypse",
+            "Seventh Edition",
+            "Planeshift",
+            "Invasion",
+            "Beatdown Box Set",
+            "Starter 2000",
+            "Prophecy",
+            "Nemesis",
+            "Battle Royale Box Set",
+            "Mercadian Masques",
+            "Starter 1999",
+            "Urza\'s Destiny",
+            "Portal Three Kingdoms",
+            "Classic Sixth Edition",
+            "Urza\'s Legacy",
+            "Urza\'s Saga",
+            "Portal Second Age",
+            "Exodus",
+            "Stronghold",
+            "Tempest",
+            "Vanguard",
+            "Portal",
+            "Weatherlight",
+            "Fifth Edition",
+            "Visions",
+            "Mirage",
+            "Alliances",
+            "Homelands",
+            "Chronicles",
+            "Ice Age",
+            "Fourth Edition",
+            "Fallen Empires",
+            "The Dark",
+            "Legends",
+            "Revised Edition",
+            "Antiquities",
+            "Arabian Nights",
+            "Unlimited",
+            "Limited Edition Beta",
+            "Limited Edition Alpha"});
             this.comboBoxSet.Location = new System.Drawing.Point(290, 75);
             this.comboBoxSet.Name = "comboBoxSet";
             this.comboBoxSet.Size = new System.Drawing.Size(166, 24);
@@ -301,9 +381,9 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(88, 349);
+            this.buttonSearch.Location = new System.Drawing.Point(76, 297);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(75, 23);
+            this.buttonSearch.Size = new System.Drawing.Size(135, 76);
             this.buttonSearch.TabIndex = 16;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = true;
@@ -328,31 +408,21 @@
             this.radioButtonAND.AutoSize = true;
             this.radioButtonAND.Location = new System.Drawing.Point(16, 218);
             this.radioButtonAND.Name = "radioButtonAND";
-            this.radioButtonAND.Size = new System.Drawing.Size(239, 21);
+            this.radioButtonAND.Size = new System.Drawing.Size(325, 21);
             this.radioButtonAND.TabIndex = 19;
-            this.radioButtonAND.Text = "AND (must be all checked colors)";
+            this.radioButtonAND.Text = "AND (must contain at least the selected colors)";
             this.radioButtonAND.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonOR
-            // 
-            this.radioButtonOR.AutoSize = true;
-            this.radioButtonOR.Location = new System.Drawing.Point(16, 246);
-            this.radioButtonOR.Name = "radioButtonOR";
-            this.radioButtonOR.Size = new System.Drawing.Size(322, 21);
-            this.radioButtonOR.TabIndex = 20;
-            this.radioButtonOR.Text = "OR (can be any one color of the above colors)";
-            this.radioButtonOR.UseVisualStyleBackColor = true;
             // 
             // radioButtonANY
             // 
             this.radioButtonANY.AutoSize = true;
             this.radioButtonANY.Checked = true;
-            this.radioButtonANY.Location = new System.Drawing.Point(16, 274);
+            this.radioButtonANY.Location = new System.Drawing.Point(16, 245);
             this.radioButtonANY.Name = "radioButtonANY";
-            this.radioButtonANY.Size = new System.Drawing.Size(336, 21);
+            this.radioButtonANY.Size = new System.Drawing.Size(270, 21);
             this.radioButtonANY.TabIndex = 21;
             this.radioButtonANY.TabStop = true;
-            this.radioButtonANY.Text = "ANY (can be any combination of selected colors)";
+            this.radioButtonANY.Text = "ANY (can contain any selected colors)";
             this.radioButtonANY.UseVisualStyleBackColor = true;
             // 
             // pictureBoxCard
@@ -367,7 +437,7 @@
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(370, 242);
+            this.textBoxOutput.Location = new System.Drawing.Point(343, 265);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.Size = new System.Drawing.Size(232, 130);
@@ -377,7 +447,7 @@
             // 
             this.LblOutput.AutoSize = true;
             this.LblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblOutput.Location = new System.Drawing.Point(367, 222);
+            this.LblOutput.Location = new System.Drawing.Point(340, 245);
             this.LblOutput.Name = "LblOutput";
             this.LblOutput.Size = new System.Drawing.Size(67, 17);
             this.LblOutput.TabIndex = 24;
@@ -474,7 +544,6 @@
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.pictureBoxCard);
             this.Controls.Add(this.radioButtonANY);
-            this.Controls.Add(this.radioButtonOR);
             this.Controls.Add(this.radioButtonAND);
             this.Controls.Add(this.checkBoxColorRandom);
             this.Controls.Add(this.buttonSearch);
@@ -519,7 +588,6 @@
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.CheckBox checkBoxColorRandom;
         private System.Windows.Forms.RadioButton radioButtonAND;
-        private System.Windows.Forms.RadioButton radioButtonOR;
         private System.Windows.Forms.RadioButton radioButtonANY;
         private System.Windows.Forms.PictureBox pictureBoxCard;
         private System.Windows.Forms.TextBox textBoxOutput;
