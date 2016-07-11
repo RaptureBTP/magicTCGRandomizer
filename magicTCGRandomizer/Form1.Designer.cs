@@ -57,6 +57,7 @@
             this.labelName = new System.Windows.Forms.Label();
             this.buttonNext = new System.Windows.Forms.Button();
             this.buttonRotate = new System.Windows.Forms.Button();
+            this.radioButtonExclusive = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCMC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCard)).BeginInit();
             this.SuspendLayout();
@@ -381,7 +382,7 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(76, 297);
+            this.buttonSearch.Location = new System.Drawing.Point(76, 323);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(135, 76);
             this.buttonSearch.TabIndex = 16;
@@ -428,7 +429,7 @@
             // pictureBoxCard
             // 
             this.pictureBoxCard.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBoxCard.Location = new System.Drawing.Point(616, 23);
+            this.pictureBoxCard.Location = new System.Drawing.Point(682, 23);
             this.pictureBoxCard.MinimumSize = new System.Drawing.Size(223, 310);
             this.pictureBoxCard.Name = "pictureBoxCard";
             this.pictureBoxCard.Size = new System.Drawing.Size(348, 376);
@@ -437,7 +438,7 @@
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(343, 265);
+            this.textBoxOutput.Location = new System.Drawing.Point(414, 265);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.Size = new System.Drawing.Size(232, 130);
@@ -447,7 +448,7 @@
             // 
             this.LblOutput.AutoSize = true;
             this.LblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblOutput.Location = new System.Drawing.Point(340, 245);
+            this.LblOutput.Location = new System.Drawing.Point(411, 245);
             this.LblOutput.Name = "LblOutput";
             this.LblOutput.Size = new System.Drawing.Size(67, 17);
             this.LblOutput.TabIndex = 24;
@@ -508,7 +509,7 @@
             // buttonNext
             // 
             this.buttonNext.Enabled = false;
-            this.buttonNext.Location = new System.Drawing.Point(694, 406);
+            this.buttonNext.Location = new System.Drawing.Point(760, 406);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 28);
             this.buttonNext.TabIndex = 31;
@@ -519,7 +520,7 @@
             // buttonRotate
             // 
             this.buttonRotate.Enabled = false;
-            this.buttonRotate.Location = new System.Drawing.Point(825, 406);
+            this.buttonRotate.Location = new System.Drawing.Point(891, 406);
             this.buttonRotate.Name = "buttonRotate";
             this.buttonRotate.Size = new System.Drawing.Size(75, 28);
             this.buttonRotate.TabIndex = 32;
@@ -527,11 +528,23 @@
             this.buttonRotate.UseVisualStyleBackColor = true;
             this.buttonRotate.Click += new System.EventHandler(this.buttonRotateRight_Click);
             // 
+            // radioButtonExclusive
+            // 
+            this.radioButtonExclusive.AutoSize = true;
+            this.radioButtonExclusive.Location = new System.Drawing.Point(16, 272);
+            this.radioButtonExclusive.Name = "radioButtonExclusive";
+            this.radioButtonExclusive.Size = new System.Drawing.Size(359, 21);
+            this.radioButtonExclusive.TabIndex = 33;
+            this.radioButtonExclusive.TabStop = true;
+            this.radioButtonExclusive.Text = "ONLY (contains only the selected colors (2+ colors))";
+            this.radioButtonExclusive.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1080, 446);
+            this.Controls.Add(this.radioButtonExclusive);
             this.Controls.Add(this.buttonRotate);
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.labelName);
@@ -600,6 +613,7 @@
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Button buttonNext;
         private System.Windows.Forms.Button buttonRotate;
+        private System.Windows.Forms.RadioButton radioButtonExclusive;
     }
 }
 

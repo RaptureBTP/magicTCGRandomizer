@@ -191,7 +191,6 @@ namespace magicTCGRandomizer
                             searchURL += "+[R]";
                         if (checkedColors.Contains("Green"))
                             searchURL += "+[G]";
-                        updateTextBox("Colors added to URL\r\n");
                     }
                     else if(radioButtonANY.Checked == true)
                     {
@@ -205,8 +204,23 @@ namespace magicTCGRandomizer
                             searchURL += "|[R]";
                         if (checkedColors.Contains("Green"))
                             searchURL += "|[G]";
-                        updateTextBox("Colors added to URL\r\n");
                     }
+                    else if(radioButtonExclusive.Checked == true)
+                    {
+                        searchURL += "+@(";
+                        if (checkedColors.Contains("White"))
+                            searchURL += "+[W]";
+                        if (checkedColors.Contains("Blue"))
+                            searchURL += "+[U]";
+                        if (checkedColors.Contains("Black"))
+                            searchURL += "+[B]";
+                        if (checkedColors.Contains("Red"))
+                            searchURL += "+[R]";
+                        if (checkedColors.Contains("Green"))
+                            searchURL += "+[G]";
+                        searchURL += ")";
+                    }
+                    updateTextBox("Colors added to URL\r\n");
                 }
 
                 //format
