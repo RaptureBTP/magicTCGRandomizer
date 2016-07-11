@@ -185,7 +185,7 @@
             "Common",
             "Uncommon",
             "Rare",
-            "Mythic Rare"});
+            "Mythic"});
             this.comboBoxRarity.Location = new System.Drawing.Point(152, 176);
             this.comboBoxRarity.Name = "comboBoxRarity";
             this.comboBoxRarity.Size = new System.Drawing.Size(121, 24);

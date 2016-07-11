@@ -405,6 +405,8 @@ namespace magicTCGRandomizer
                         }
                     }
                     lastResults = compiledCardList;
+                    if(!(getTextFromForm("rarity").Equals("Random")))
+                        updateTextBox("NOTE: If card results show a differing rarity, they most likely have been printed in your chosen rarity in another set.\r\n");
                     updatePictureBox();
                 }
 
