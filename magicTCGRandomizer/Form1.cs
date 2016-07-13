@@ -1,6 +1,6 @@
 ﻿/*Author: Brady Ericksen
-Last Edit: 7/6/2016
-Version: v0.5 Alpha
+Last Edit: 7/13/2016
+Version: v0.6 Alpha
 */
 using System;
 using System.Collections.Generic;
@@ -315,6 +315,7 @@ namespace magicTCGRandomizer
                 }
                 else //found multiple results or no results
                 {
+
                     List<String> compiledCardList = new List<String>();
                     updateTextBox("Found multiple results.\r\n");
                     bool loop = true;
@@ -330,12 +331,17 @@ namespace magicTCGRandomizer
                         foundTotalPages = true;
                         int lastPageIndex = pageControlContainer.ChildNodes[1].ChildNodes.Count;
                         string lastPageLink = pageControlContainer.ChildNodes[1].ChildNodes[lastPageIndex - 1].OuterHtml.ToString();
-                        string maxPageNumString = Regex.Match(lastPageLink, "(page=\\d)").ToString();
-                        maxPageNum = Int32.Parse(Regex.Match(maxPageNumString, "\\d").ToString());
+                        string maxPageNumString = Regex.Match(lastPageLink, "(page=\\d+)").ToString();
+                        maxPageNum = Int32.Parse(Regex.Match(maxPageNumString, "\\d+").ToString());
                     }
 
                     while (loop)
                     {
+                        if (pageNum > maxPageNum + 1)
+                        {
+                            foundEverything = true;
+                            break;
+                        }
                         var searchResults = document.GetElementbyId("ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_searchResultsContainer");
 
                         var cardsTable = searchResults.ChildNodes[1].ChildNodes[7].ChildNodes[1].ChildNodes[0];
@@ -390,7 +396,7 @@ namespace magicTCGRandomizer
 
                                 if (!(getTextFromForm("keyword").Equals(""))) //if user enetered a keyword
                                 {
-                                    if (!(cardInfo.Contains(getTextFromForm("keyword"))))
+                                    if (!(cardInfo.ToLower().Contains(getTextFromForm("keyword"))))
                                         continue;
                                 }
                                 string imgStringMatch = Regex.Match(possibleCardImage.InnerHtml, "img src=\".+&").ToString(); //use regex to obtain only the image source portion of the HTML
@@ -398,19 +404,20 @@ namespace magicTCGRandomizer
                                 string totalImgURL = "http://gatherer.wizards.com" + imgStringMatch + "type=card"; //create full URL
                                 if (!(compiledCardList.Contains(totalImgURL)))
                                     compiledCardList.Add(totalImgURL);
-                                else if(pageNum > maxPageNum + 1)
+                                /*if(pageNum > maxPageNum + 1)
                                 {
                                     foundEverything = true;
                                     break;
-                                }
+                                } */
                             }
                         }
                         //check if there are multiple pages to look through
                         if (pageControlContainer != null && foundEverything == false)
                         {
                             document = getHtmlWeb.Load(baseURL + "page=" + pageNum.ToString() + "&" + searchURL); //load next page
+                            updateTextBox("Loading page " + pageNum + "\r\n");
                             pageNum++;
-                            updateTextBox("Please wait...\r\n");
+                            //updateTextBox("Please wait...\r\n");
                         }
                         else
                         {
